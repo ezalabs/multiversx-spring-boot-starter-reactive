@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.crldev.elrondspringbootstarterreactive.ErdClientAutoConfiguration,\
+com.crldev.elrondspringbootstarterreactive.config.ErdNetworkConfigSupplier,\
+com.crldev.elrondspringbootstarterreactive.ErdInteractorAutoConfiguration,\
+com.crldev.elrondspringbootstarterreactive.TransactionSenderServiceAutoconfiguration

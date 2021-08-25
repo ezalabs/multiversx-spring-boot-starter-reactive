@@ -1,0 +1,46 @@
+package software.crldev.elrondspringbootstarterreactive;
+
+import software.crldev.elrondspringbootstarterreactive.client.ErdProxyClient;
+import software.crldev.elrondspringbootstarterreactive.interactor.account.ErdAccountInteractor;
+import software.crldev.elrondspringbootstarterreactive.interactor.account.ErdAccountInteractorImpl;
+import software.crldev.elrondspringbootstarterreactive.interactor.block.ErdBlockInteractor;
+import software.crldev.elrondspringbootstarterreactive.interactor.block.ErdBlockInteractorImpl;
+import software.crldev.elrondspringbootstarterreactive.interactor.network.ErdNetworkInteractor;
+import software.crldev.elrondspringbootstarterreactive.interactor.network.ErdNetworkInteractorImpl;
+import software.crldev.elrondspringbootstarterreactive.interactor.transaction.ErdTransactionInteractor;
+import software.crldev.elrondspringbootstarterreactive.interactor.transaction.ErdTransactionInteractorImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ConditionalOnClass({ErdNetworkInteractor.class, ErdAccountInteractor.class, ErdTransactionInteractor.class})
+@AutoConfigureAfter(ErdClientAutoConfiguration.class)
+public class ErdInteractorAutoConfiguration {
+
+    @Autowired
+    private ErdProxyClient erdProxyClient;
+
+    @Bean
+    public ErdNetworkInteractor networkInteractor() {
+        return new ErdNetworkInteractorImpl(erdProxyClient);
+    }
+
+    @Bean
+    public ErdAccountInteractor accountInteractor() {
+        return new ErdAccountInteractorImpl(erdProxyClient);
+    }
+
+    @Bean
+    public ErdTransactionInteractor transactionInteractor() {
+        return new ErdTransactionInteractorImpl(erdProxyClient);
+    }
+
+    @Bean
+    public ErdBlockInteractor blockInteractor() {
+        return new ErdBlockInteractorImpl(erdProxyClient);
+    }
+
+}

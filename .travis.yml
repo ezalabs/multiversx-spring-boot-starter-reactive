@@ -1,0 +1,16 @@
+language: java
+install: skip
+
+jdk: openjdk11
+
+branches:
+  only:
+  - main
+
+cache:
+  directories:
+    - .autoconf
+    - $HOME/.m2
+
+script:
+- ./ci-build.sh

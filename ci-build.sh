@@ -1,4 +1,3 @@
 #!/bin/bash
 
-./gradlew clean test build
-#./gradlew publishToSonatype
+./gradlew build publishToSonatype

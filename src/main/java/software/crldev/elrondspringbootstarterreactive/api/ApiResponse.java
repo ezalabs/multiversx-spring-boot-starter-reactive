@@ -1,7 +1,7 @@
 package software.crldev.elrondspringbootstarterreactive.api;
 
-import software.crldev.elrondspringbootstarterreactive.error.exception.ResponseException;
 import lombok.Data;
+import software.crldev.elrondspringbootstarterreactive.error.exception.ResponseException;
 
 import static io.netty.util.internal.StringUtil.isNullOrEmpty;
 
@@ -27,7 +27,7 @@ public class ApiResponse<T> {
             throw new ResponseException(error);
 
         if (!code.equals("successful"))
-            throw new ResponseException(error);
+            throw new ResponseException();
     }
 
 }

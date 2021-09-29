@@ -19,6 +19,8 @@ public class JsonMapper {
 
     private static final ObjectMapper mapper;
 
+    private JsonMapper() {}
+
     static {
         mapper = new Jackson2ObjectMapperBuilder()
                 .build()
@@ -47,26 +49,10 @@ public class JsonMapper {
      *
      * @param object - target object
      * @return - buffer of the JSON String
-     * @throws JsonProcessingException
+     * @throws - JsonProcessingException
      */
     public static byte[] serializeToJsonBuffer(Object object) throws JsonProcessingException {
         return mapper.writeValueAsString(object).getBytes();
-    }
-
-    /**
-     * Deserializes a JSON file to an Object
-     *
-     * @param file - target JSON file
-     * @param type - class of the target Object type
-     * @param <T> - target Object type
-     * @return - an instance of the deserialized Object
-     */
-    public static <T> T deserializeFile(File file, Class<T> type) {
-        try {
-            return mapper.readValue(file, type);
-        } catch (IOException e) {
-            throw new DeserializationException(e.getMessage());
-        }
     }
 
 }

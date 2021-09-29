@@ -25,6 +25,7 @@ public enum ErrorMessage {
     CANNOT_DERIVE_KEYS("Cannot derive keys"),
     CANNOT_SIGN_TRANSACTION("Cannot sign transaction. %s."),
     SIGNATURE_EMPTY("Cannot retrieve hex value, signature is empty."),
+    RESPONSE_NOT_SUCCESSFUL("Response not successful."),
     CANNOT_CREATE_WALLET("Cannot create wallet. %s."),
     INVALID_NONCE("Invalid nonce: %s."),
     INVALID_BALANCE("Invalid balance: %s."),

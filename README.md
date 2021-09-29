@@ -42,7 +42,7 @@ To use the starter, add the following dependency to the dependencies section of 
 - Gradle (in your build.gradle file)
 ```
 dependencies {
-  implementation 'software.crldev:elrond-spring-boot-starter-reactive:1.0.0'
+  implementation(group: 'software.crldev', name: 'elrond-spring-boot-starter-reactive', version: '1.0.0')
 }
 ```
 
@@ -118,7 +118,9 @@ The interaction with the Elrond Network is done with the help of a set of so cal
 - queryTransactionStatus
 ```
 The Transaction Interactor can be used for a more granular approach to transaction sending.\
-For a more simple way of doing transaction operations, there is another component:
+In order to create a sendable transaction, we must first create an instance of a transaction using **[Transaction](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/transaction/Transaction.java)** domain object (manually adding nonce, gasLimit), then sign using a wallet and transform it to a payload for the Transaction Interactor (using toSendable() method).
+
+For a more simple way of doing transaction operations, another component is more suitable:
 
 **[Simple Transaction Sender](src/main/java/software/crldev/elrondspringbootstarterreactive/sender/ErdSimpleTransactionSender.java)**
 ```

@@ -24,6 +24,8 @@ import static software.crldev.elrondspringbootstarterreactive.config.WalletConst
  * Utility class for mnemonics operations
  *
  * @author carlo_stanciu
+ *
+ *  source from
  */
 public class MnemonicsUtils {
 
@@ -45,7 +47,7 @@ public class MnemonicsUtils {
     /**
      * Method used to extract private key buffer from a list of mnemonics
      *
-     * @param mnemonics    - a list of mnemonic words in String format
+     * @param mnemonics - a mnemonic phrase as list of String objects
      * @param accountIndex - accountIndex
      * @return - buffer of the private key
      */
@@ -132,7 +134,7 @@ public class MnemonicsUtils {
         public final byte[] key;
         public final byte[] chainCode;
 
-        public KeyAndChainCode(byte[] key, byte[] chainCode) {
+        private KeyAndChainCode(byte[] key, byte[] chainCode) {
             this.key = key;
             this.chainCode = chainCode;
         }

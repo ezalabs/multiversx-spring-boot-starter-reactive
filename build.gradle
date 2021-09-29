@@ -1,6 +1,7 @@
 plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java-library'
+    id 'jacoco'
     id "io.freefair.lombok" version "6.1.0"
     id 'maven-publish'
     id 'signing'
@@ -15,67 +16,6 @@ setVersion('1.0.0')
 repositories {
     mavenLocal()
     mavenCentral()
-}
-
-task javadocJar(type: Jar) {
-    classifier('javadoc')
-    from javadoc.destinationDir
-}
-
-task sourcesJar(type: Jar) {
-    classifier('sources')
-    from sourceSets.main.delombokTask
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-
-            pom {
-                name.set('Elrond Spring Boot Starter Reactive')
-                description.set( 'A solution designed to ensure efficient integration with the Elrond Network in a Spring Boot Starter manner with Reactive an approach.')
-                url.set('https://github.com/crldev-software/elrond-spring-boot-starter-reactive')
-                licenses {
-                    license {
-                        name.set("MIT")
-                        url.set("https://github.com/crldev-software/elrond-spring-boot-starter-reactive/blob/main/LICENSE")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set('carlo_stanciu')
-                        name.set('Carlo Stanciu')
-                        email.set('carlo@crldev.software')
-                    }
-                }
-                scm {
-                    connection.set('scm:git:git://github.com/crldev-software/elrond-spring-boot-starter-reactive.git')
-                    developerConnection.set('scm:git:git://github.com/crldev-software/elrond-spring-boot-starter-reactive.git')
-                    url.set('https://github.com/crldev-software/elrond-spring-boot-starter-reactive')
-                }
-            }
-        }
-    }
-}
-
-nexusPublishing {
-    repositories {
-        sonatype {
-            username.set(System.getenv("OSSRH_USER"))
-            password.set(System.getenv("OSSRH_PASSWORD"))
-        }
-    }
-}
-
-signing {
-    def key = System.getenv("SIGNING_KEY")
-    def password = System.getenv("SIGNING_PASSWORD")
-
-    useInMemoryPgpKeys(key, password)
-    sign publishing.publications.mavenJava
 }
 
 configurations {
@@ -100,6 +40,114 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
 }
 
+def rootPackage = 'software.crldev.elrondspringbootstarterreactive'
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 0.8
+
+                excludes = [
+                        rootPackage + '.error.*',
+                        rootPackage + '.api.model.*',
+                        rootPackage + '.util.MnemonicsUtils.KeyAndChainCode',
+                        rootPackage + '.ErdNetworkAutoConfiguration',
+                        rootPackage + '.TransactionSenderServiceAutoconfiguration',
+                        rootPackage + '.ErdClientAutoConfiguration',
+                        rootPackage + '.ErdInteractorAutoConfiguration',
+                        rootPackage + '.interactor.WrappedResponses',
+                        rootPackage + '.config.ErdClientConfig',
+                        rootPackage + '.config.AddressConstants',
+                        rootPackage + '.config.ErdNetworkConfigSupplier',
+                ]
+            }
+        }
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+
 test {
     useJUnitPlatform()
+    finalizedBy(jacocoTestCoverageVerification)
+}
+
+jacocoTestReport {
+    dependsOn test
+}
+
+task javadocJar(type: Jar) {
+    classifier('javadoc')
+    from javadoc.destinationDir
+}
+
+task sourcesJar(type: Jar) {
+    classifier('sources')
+    from sourceSets.main.delombokTask
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact javadocJar
+            artifact sourcesJar
+
+            pom {
+                name.set('Elrond Spring Boot Starter Reactive')
+                description.set('A SpringBoot Starter solution designed to ensure easy and efficient integration with the Elrond Network using a Reactive API layer.')
+                url.set('https://github.com/crldev-software/elrond-spring-boot-starter-reactive')
+                licenses {
+                    license {
+                        name.set("MIT")
+                        url.set("https://github.com/crldev-software/elrond-spring-boot-starter-reactive/blob/main/LICENSE")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set('carlo_stanciu')
+                        name.set('Carlo Stanciu @ crldev.software')
+                        email.set('carlo@crldev.software')
+                    }
+                }
+                scm {
+                    connection.set('scm:git:git://github.com/crldev-software/elrond-spring-boot-starter-reactive.git')
+                    developerConnection.set('scm:git:git://github.com/crldev-software/elrond-spring-boot-starter-reactive.git')
+                    url.set('https://github.com/crldev-software/elrond-spring-boot-starter-reactive')
+                }
+            }
+        }
+    }
+}
+
+def decodeBase64 = { String value -> new String(Base64.getDecoder().decode(value)) }
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            username.set(decodeBase64(System.getenv("OSSRH_USER")))
+            password.set(decodeBase64(System.getenv("OSSRH_PASSWORD")))
+        }
+    }
+}
+
+signing {
+    def key = decodeBase64(System.getenv("SIGNING_KEY"))
+    def password = decodeBase64(System.getenv("SIGNING_PASSWORD"))
+
+    useInMemoryPgpKeys(key, password)
+    sign publishing.publications.mavenJava
 }

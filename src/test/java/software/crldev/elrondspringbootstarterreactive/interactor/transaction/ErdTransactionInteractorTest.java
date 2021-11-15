@@ -1,26 +1,26 @@
 package software.crldev.elrondspringbootstarterreactive.interactor.transaction;
 
-import software.crldev.elrondspringbootstarterreactive.api.model.*;
-import software.crldev.elrondspringbootstarterreactive.client.ErdProxyClient;
-import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.Transaction;
-import software.crldev.elrondspringbootstarterreactive.error.exception.ProxyRequestException;
-import software.crldev.elrondspringbootstarterreactive.interactor.WrappedResponses;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpMethod;
+import software.crldev.elrondspringbootstarterreactive.api.model.*;
+import software.crldev.elrondspringbootstarterreactive.client.ErdProxyClient;
+import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.Transaction;
+import software.crldev.elrondspringbootstarterreactive.error.exception.ProxyRequestException;
+import software.crldev.elrondspringbootstarterreactive.interactor.WrappedResponses;
 
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static software.crldev.elrondspringbootstarterreactive.config.CurrencyConstants.ONE_EGLD_STRING;
 import static software.crldev.elrondspringbootstarterreactive.interactor.Helper.verifyInteractionException;
 import static software.crldev.elrondspringbootstarterreactive.interactor.Helper.verifyInteractionOk;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class ErdTransactionInteractorTest {
@@ -32,7 +32,7 @@ class ErdTransactionInteractorTest {
 
     Address senderAddress = Address.fromBech32("erd1h7r2m9c250yncguz3zwq5na6gu5ttwz3vdx40nxkthxaak5v3wcqtpkvkj");
     String hash = "699ae03e6f9a18cb8b1f131b061a46a8b7dd96dfa3fe24861f03aa824a462920";
-    SendableTransaction sendable = new Transaction().toSendable();
+    Transaction.Sendable sendable = new Transaction().toSendable();
 
     @BeforeEach
     void setUp() {
@@ -54,14 +54,17 @@ class ErdTransactionInteractorTest {
     void sendMultipleTransactions() {
         var apiResponse = TransactionsSentResult.builder()
                 .numberOfSentTransactions(2)
-                .transactionsHashes(new HashMap<>(){{ put("0","2352523"); put("1", "43093403"); }})
+                .transactionsHashes(new HashMap<>() {{
+                    put("0", "2352523");
+                    put("1", "43093403");
+                }})
                 .build();
 
         verifyInteractionOk(
                 client,
                 apiResponse,
                 () -> interactor.sendBatchOfTransactions(List.of(new Transaction().toSendable(), new Transaction().toSendable())),
-                (r) ->  {
+                (r) -> {
                     assertEquals(2, r.getNumberOfSentTransactions());
                     assertEquals("2352523", r.getTransactionsHashes().get("0"));
                     assertEquals("43093403", r.getTransactionsHashes().get("1"));

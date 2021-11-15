@@ -5,6 +5,7 @@ import software.crldev.elrondspringbootstarterreactive.api.model.TransactionCost
 import software.crldev.elrondspringbootstarterreactive.api.model.TransactionHash;
 import software.crldev.elrondspringbootstarterreactive.api.model.TransactionsSentResult;
 import reactor.core.publisher.Mono;
+import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface ErdSimpleTransactionSender {
      * @param request - object containing minimum required data
      * @return - TransactionHash API response
      */
-    Mono<TransactionHash> send(TransactionRequest request);
+    Mono<TransactionHash> send(Wallet wallet, TransactionRequest request);
 
     /**
      * Method used to send a batch of transactions for execution
@@ -32,7 +33,7 @@ public interface ErdSimpleTransactionSender {
      * @param request -  a list of TransactionRequest
      * @return - TransactionsSentResult API response
      */
-    Mono<TransactionsSentResult> sendBatchOfTransactions(List<TransactionRequest> request);
+    Mono<TransactionsSentResult> sendBatch(Wallet wallet, List<TransactionRequest> request);
 
     /**
      * Method used to send a transaction for simulation
@@ -40,7 +41,7 @@ public interface ErdSimpleTransactionSender {
      * @param request - object containing minimum required data
      * @return - SimulationResults API response
      */
-    Mono<SimulationResults> simulate(TransactionRequest request);
+    Mono<SimulationResults> simulate(Wallet wallet, TransactionRequest request);
 
     /**
      * Method used to send a transaction for cost querying
@@ -48,6 +49,6 @@ public interface ErdSimpleTransactionSender {
      * @param request - object containing minimum required data
      * @return - TransactionCostEstimation API response
      */
-    Mono<TransactionCostEstimation> estimate(TransactionRequest request);
+    Mono<TransactionCostEstimation> estimate(Wallet wallet, TransactionRequest request);
 
 }

@@ -1,13 +1,18 @@
 package software.crldev.elrondspringbootstarterreactive.domain.transaction;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Value;
 import software.crldev.elrondspringbootstarterreactive.config.ErdNetworkConfigSupplier;
 import software.crldev.elrondspringbootstarterreactive.config.JsonMapper;
 import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
 import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
 import software.crldev.elrondspringbootstarterreactive.domain.common.Nonce;
-import software.crldev.elrondspringbootstarterreactive.interactor.transaction.SendableTransaction;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import lombok.Data;
+
+import java.math.BigInteger;
 
 import static software.crldev.elrondspringbootstarterreactive.util.GasUtils.computeGasCost;
 
@@ -49,7 +54,7 @@ public class Transaction implements Signable {
      *
      * @return - instance of SendableTransaction
      */
-    public SendableTransaction toSendable() {
+    public Sendable toSendable() {
         return generateSender(false);
     }
 
@@ -59,7 +64,7 @@ public class Transaction implements Signable {
      *
      * @return - instance of SendableTransaction
      */
-    public SendableTransaction toSendableForEstimation() {
+    public Sendable toSendableForEstimation() {
         return generateSender(true);
     }
 
@@ -75,8 +80,8 @@ public class Transaction implements Signable {
         this.gasLimit = GasLimit.fromNumber(computeGasCost(payloadData));
     }
 
-    private SendableTransaction generateSender(boolean isEstimation) {
-        var sendableBuilder = SendableTransaction.builder()
+    private Sendable generateSender(boolean isEstimation) {
+        var sendableBuilder = Sendable.builder()
                 .chainId(chainID.getValue())
                 .nonce(nonce.getValue())
                 .value(value.toString())
@@ -91,6 +96,37 @@ public class Transaction implements Signable {
         }
 
         return sendableBuilder.build();
+    }
+
+    /**
+     * This inner class represents a Transaction in a sendable format
+     * used for the TransactionInteractor
+     */
+    @Value
+    @Builder(access = AccessLevel.PRIVATE)
+    public static class Sendable {
+
+        @JsonProperty("nonce")
+        Long nonce;
+        @JsonProperty("value")
+        String value;
+        @JsonProperty("receiver")
+        String receiver;
+        @JsonProperty("sender")
+        String sender;
+        @JsonProperty("gasPrice")
+        BigInteger gasPrice;
+        @JsonProperty("gasLimit")
+        BigInteger gasLimit;
+        @JsonProperty("data")
+        String data;
+        @JsonProperty("chainID")
+        String chainId;
+        @JsonProperty("signature")
+        String signature;
+        @JsonProperty("version")
+        Integer version;
+
     }
 
 }

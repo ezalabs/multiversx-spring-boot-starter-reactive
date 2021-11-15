@@ -5,6 +5,7 @@ import reactor.core.publisher.Mono;
 import software.crldev.elrondspringbootstarterreactive.api.ApiResourceURI;
 import software.crldev.elrondspringbootstarterreactive.api.model.*;
 import software.crldev.elrondspringbootstarterreactive.client.ErdProxyClient;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.Transaction;
 import software.crldev.elrondspringbootstarterreactive.error.exception.InvalidSentTransactionsException;
 import software.crldev.elrondspringbootstarterreactive.error.exception.ProxyRequestException;
 import software.crldev.elrondspringbootstarterreactive.interactor.WrappedResponses;
@@ -19,7 +20,7 @@ public class ErdTransactionInteractorImpl implements ErdTransactionInteractor {
     private final ErdProxyClient client;
 
     @Override
-    public Mono<TransactionHash> sendTransaction(SendableTransaction payload) {
+    public Mono<TransactionHash> sendTransaction(Transaction.Sendable payload) {
         return client
                 .post(ApiResourceURI.SEND_TRANSACTION.getURI(),
                         payload,
@@ -27,7 +28,7 @@ public class ErdTransactionInteractorImpl implements ErdTransactionInteractor {
     }
 
     @Override
-    public Mono<TransactionsSentResult> sendBatchOfTransactions(List<SendableTransaction> payloads) {
+    public Mono<TransactionsSentResult> sendBatchOfTransactions(List<Transaction.Sendable> payloads) {
         return client
                 .post(ApiResourceURI.SEND_MULTIPLE_TRANSACTIONS.getURI(),
                         payloads.toArray(),
@@ -36,14 +37,14 @@ public class ErdTransactionInteractorImpl implements ErdTransactionInteractor {
     }
 
     @Override
-    public Mono<SimulationResults> simulateTransaction(SendableTransaction payload) {
+    public Mono<SimulationResults> simulateTransaction(Transaction.Sendable payload) {
         return client
                 .post(ApiResourceURI.SIMULATE_TRANSACTION.getURI(), payload, WrappedResponses.SimulateTransactionResponse.class)
                 .map(WrappedResponses.SimulateTransactionResponse::getResult);
     }
 
     @Override
-    public Mono<TransactionCostEstimation> estimateTransactionCost(SendableTransaction payload) {
+    public Mono<TransactionCostEstimation> estimateTransactionCost(Transaction.Sendable payload) {
         return client
                 .post(ApiResourceURI.ESTIMATE_TRANSACTION_COST.getURI(),
                         payload,

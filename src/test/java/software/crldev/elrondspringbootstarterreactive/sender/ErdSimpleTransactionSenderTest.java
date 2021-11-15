@@ -1,14 +1,5 @@
 package software.crldev.elrondspringbootstarterreactive.sender;
 
-import software.crldev.elrondspringbootstarterreactive.api.model.*;
-import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
-import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
-import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
-import software.crldev.elrondspringbootstarterreactive.error.exception.MissingTransactionRequestException;
-import software.crldev.elrondspringbootstarterreactive.interactor.account.ErdAccountInteractor;
-import software.crldev.elrondspringbootstarterreactive.interactor.transaction.ErdTransactionInteractor;
-import software.crldev.elrondspringbootstarterreactive.interactor.transaction.SendableTransaction;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,9 +10,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-import software.crldev.elrondspringbootstarterreactive.sender.ErdSimpleTransactionSender;
-import software.crldev.elrondspringbootstarterreactive.sender.ErdSimpleTransactionSenderImpl;
-import software.crldev.elrondspringbootstarterreactive.sender.TransactionRequest;
+import software.crldev.elrondspringbootstarterreactive.api.model.*;
+import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
+import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.Transaction;
+import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
+import software.crldev.elrondspringbootstarterreactive.error.exception.MissingTransactionRequestException;
+import software.crldev.elrondspringbootstarterreactive.interactor.account.ErdAccountInteractor;
+import software.crldev.elrondspringbootstarterreactive.interactor.transaction.ErdTransactionInteractor;
 
 import java.util.Base64;
 import java.util.HashMap;
@@ -42,9 +39,9 @@ class ErdSimpleTransactionSenderTest {
     ErdTransactionInteractor transactionInteractor;
 
     @Captor
-    ArgumentCaptor<SendableTransaction> sendableCaptor;
+    ArgumentCaptor<Transaction.Sendable> sendableCaptor;
     @Captor
-    ArgumentCaptor<List<SendableTransaction>> sendablesCaptor;
+    ArgumentCaptor<List<Transaction.Sendable>> sendablesCaptor;
 
     String senderAddressBech32 = "erd1h7r2m9c250yncguz3zwq5na6gu5ttwz3vdx40nxkthxaak5v3wcqtpkvkj";
     String receiverAddressBech32 = "erd1gklqdv77my5y8n75hszv737gq54q9xk0tmzdh8v5vkfstd64aw7ser9nfr";
@@ -67,7 +64,7 @@ class ErdSimpleTransactionSenderTest {
         when(transactionInteractor.sendTransaction(sendableCaptor.capture()))
                 .thenReturn(Mono.just(TransactionHash.builder().hash("1234").build()));
 
-        StepVerifier.create(sender.send(request))
+        StepVerifier.create(sender.send(wallet, request))
                 .assertNext(r -> {
                     var sendable = sendableCaptor.getValue();
 
@@ -104,7 +101,7 @@ class ErdSimpleTransactionSenderTest {
                         }})
                         .build()));
 
-        StepVerifier.create(sender.sendBatchOfTransactions(listOfRequests))
+        StepVerifier.create(sender.sendBatch(wallet, listOfRequests))
                 .assertNext(r -> {
                     var listOfSendables = sendablesCaptor.getValue();
 
@@ -134,7 +131,7 @@ class ErdSimpleTransactionSenderTest {
 
     @Test
     void sendMultiple_emptyList() {
-        assertThrows(MissingTransactionRequestException.class, () -> sender.sendBatchOfTransactions(Lists.emptyList()));
+        assertThrows(MissingTransactionRequestException.class, () -> sender.sendBatch(wallet, Lists.emptyList()));
     }
 
     @Test
@@ -153,7 +150,7 @@ class ErdSimpleTransactionSenderTest {
                                 .build())
                         .build()));
 
-        StepVerifier.create(sender.simulate(request))
+        StepVerifier.create(sender.simulate(wallet, request))
                 .assertNext(r -> {
                     var sendable = sendableCaptor.getValue();
 
@@ -181,7 +178,7 @@ class ErdSimpleTransactionSenderTest {
                         .transactionGasUnits("70000")
                         .build()));
 
-        StepVerifier.create(sender.estimate(request))
+        StepVerifier.create(sender.estimate(wallet, request))
                 .assertNext(r -> {
                     var sendable = sendableCaptor.getValue();
 
@@ -204,7 +201,6 @@ class ErdSimpleTransactionSenderTest {
 
     private TransactionRequest buildRequest(Double value, String data) {
         return TransactionRequest.builder()
-                .wallet(wallet)
                 .value(Balance.fromEgld(value))
                 .receiverAddress(Address.fromBech32(receiverAddressBech32))
                 .data(PayloadData.fromString(data))

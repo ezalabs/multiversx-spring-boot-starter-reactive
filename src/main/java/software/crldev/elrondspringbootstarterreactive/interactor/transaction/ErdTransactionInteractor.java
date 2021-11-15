@@ -2,6 +2,7 @@ package software.crldev.elrondspringbootstarterreactive.interactor.transaction;
 
 import reactor.core.publisher.Mono;
 import software.crldev.elrondspringbootstarterreactive.api.model.*;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.Transaction;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface ErdTransactionInteractor {
      * @param payload - transaction in sendable format
      * @return - TransactionHash API response
      */
-    Mono<TransactionHash> sendTransaction(SendableTransaction payload);
+    Mono<TransactionHash> sendTransaction(Transaction.Sendable payload);
 
     /**
      * Method used to send a batch of transactions for execution
@@ -26,7 +27,7 @@ public interface ErdTransactionInteractor {
      * @param payload - a list of transactions in sendable format
      * @return - TransactionsSentResult API response
      */
-    Mono<TransactionsSentResult> sendBatchOfTransactions(List<SendableTransaction> payload);
+    Mono<TransactionsSentResult> sendBatchOfTransactions(List<Transaction.Sendable> payload);
 
     /**
      * Method used to send a transaction for simulation
@@ -34,7 +35,7 @@ public interface ErdTransactionInteractor {
      * @param payload - transaction in sendable format
      * @return - SimulationResults API response
      */
-    Mono<SimulationResults> simulateTransaction(SendableTransaction payload);
+    Mono<SimulationResults> simulateTransaction(Transaction.Sendable payload);
 
     /**
      * Method used to send a transaction for cost querying
@@ -42,7 +43,7 @@ public interface ErdTransactionInteractor {
      * @param payload - transaction in sendable format
      * @return - TransactionCostEstimation API response
      */
-    Mono<TransactionCostEstimation> estimateTransactionCost(SendableTransaction payload);
+    Mono<TransactionCostEstimation> estimateTransactionCost(Transaction.Sendable payload);
 
     /**
      * Method used to query a Transaction's information

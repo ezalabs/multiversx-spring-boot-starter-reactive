@@ -6,10 +6,10 @@ import software.crldev.elrondspringbootstarterreactive.api.model.*;
 import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
 import software.crldev.elrondspringbootstarterreactive.domain.common.Nonce;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.Transaction;
+import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
 import software.crldev.elrondspringbootstarterreactive.error.exception.MissingTransactionRequestException;
 import software.crldev.elrondspringbootstarterreactive.interactor.account.ErdAccountInteractor;
 import software.crldev.elrondspringbootstarterreactive.interactor.transaction.ErdTransactionInteractor;
-import software.crldev.elrondspringbootstarterreactive.interactor.transaction.SendableTransaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +21,21 @@ public class ErdSimpleTransactionSenderImpl implements ErdSimpleTransactionSende
     private final ErdTransactionInteractor transactionInteractor;
 
     @Override
-    public Mono<TransactionHash> send(TransactionRequest request) {
-        return assignNonce(request)
-                .map(nonce -> buildSendableFromRequest(request, nonce, false))
+    public Mono<TransactionHash> send(Wallet wallet, TransactionRequest request) {
+        return assignNonce(wallet)
+                .map(nonce -> buildSendableFromRequest(wallet, request, nonce, false))
                 .flatMap(transactionInteractor::sendTransaction);
     }
 
     @Override
-    public Mono<TransactionsSentResult> sendBatchOfTransactions(List<TransactionRequest> request) {
-        return assignNonce(request.stream().findFirst().orElseThrow(MissingTransactionRequestException::new))
+    public Mono<TransactionsSentResult> sendBatch(Wallet wallet, List<TransactionRequest> request) {
+        request.stream().findFirst().orElseThrow(MissingTransactionRequestException::new);
+        return assignNonce(wallet)
                 .map(n -> {
-                    var listOfSendables = new ArrayList<SendableTransaction>();
+                    var listOfSendables = new ArrayList<Transaction.Sendable>();
 
                     for (long i = 0, nonce = n; i < request.size() && nonce <= nonce + request.size(); i++, nonce++)
-                        listOfSendables.add(buildSendableFromRequest(request.get((int) i), nonce, false));
+                        listOfSendables.add(buildSendableFromRequest(wallet, request.get((int) i), nonce, false));
 
                     return listOfSendables;
                 })
@@ -42,21 +43,20 @@ public class ErdSimpleTransactionSenderImpl implements ErdSimpleTransactionSende
     }
 
     @Override
-    public Mono<SimulationResults> simulate(TransactionRequest request) {
-        return assignNonce(request)
-                .map(nonce -> buildSendableFromRequest(request, nonce, false))
+    public Mono<SimulationResults> simulate(Wallet wallet, TransactionRequest request) {
+        return assignNonce(wallet)
+                .map(nonce -> buildSendableFromRequest(wallet, request, nonce, false))
                 .flatMap(transactionInteractor::simulateTransaction);
     }
 
     @Override
-    public Mono<TransactionCostEstimation> estimate(TransactionRequest request) {
-        return assignNonce(request)
-                .map(nonce -> buildSendableFromRequest(request, nonce, true))
+    public Mono<TransactionCostEstimation> estimate(Wallet wallet, TransactionRequest request) {
+        return assignNonce(wallet)
+                .map(nonce -> buildSendableFromRequest(wallet, request, nonce, true))
                 .flatMap(transactionInteractor::estimateTransactionCost);
     }
 
-    private SendableTransaction buildSendableFromRequest(TransactionRequest request, Long nonceValue, boolean isEstimationRequest) {
-        var wallet = request.getWallet();
+    private Transaction.Sendable buildSendableFromRequest(Wallet wallet, TransactionRequest request, Long nonceValue, boolean isEstimationRequest) {
         var senderAddress = Address.fromHex(wallet.getPublicKeyHex());
         var receiverAddress = request.getReceiverAddress();
         var nonce = Nonce.fromLong(nonceValue);
@@ -77,9 +77,9 @@ public class ErdSimpleTransactionSenderImpl implements ErdSimpleTransactionSende
         return transaction.toSendable();
     }
 
-    private Mono<Long> assignNonce(TransactionRequest request) {
+    private Mono<Long> assignNonce(Wallet wallet) {
         return accountInteractor.getNonce(Address
-                .fromHex(request.getWallet().getPublicKeyHex()))
+                        .fromHex(wallet.getPublicKeyHex()))
                 .map(AddressNonce::getNonce);
     }
 

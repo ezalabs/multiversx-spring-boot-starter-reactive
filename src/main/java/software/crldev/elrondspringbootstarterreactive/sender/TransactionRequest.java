@@ -1,15 +1,14 @@
 package software.crldev.elrondspringbootstarterreactive.sender;
 
-import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
-import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
-import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
+import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
 
 /**
- * Object used as a parameter in the TransactionSender's methods
+ * Object used as a payload in the TransactionSender's methods
  *
  * @author carlo_stanciu
  */
@@ -17,8 +16,6 @@ import lombok.Value;
 @Value
 public class TransactionRequest {
 
-    @NonNull
-    Wallet wallet;
     @NonNull
     Address receiverAddress;
     @NonNull

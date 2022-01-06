@@ -1,5 +1,6 @@
 package software.crldev.elrondspringbootstarterreactive.client;
 
+import lombok.extern.slf4j.Slf4j;
 import software.crldev.elrondspringbootstarterreactive.api.ApiResponse;
 import software.crldev.elrondspringbootstarterreactive.config.ErdClientConfig;
 import software.crldev.elrondspringbootstarterreactive.config.JsonMapper;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 import static java.util.Objects.nonNull;
 
+@Slf4j
 public class ErdProxyClientImpl implements ErdProxyClient {
 
     private final WebClient erdClient;
@@ -21,10 +23,12 @@ public class ErdProxyClientImpl implements ErdProxyClient {
     }
 
     public <T> Mono<T> get(String uri, Class<T> responseType) {
+        log.debug("[ProxyClient] executing GET {}", uri);
         return processRequest(uri, null, responseType, HttpMethod.GET);
     }
 
     public <T, P> Mono<T> post(String uri, P payload, Class<T> responseType) {
+        log.debug("[ProxyClient] executing POST {}", uri);
         return processRequest(uri, payload, responseType, HttpMethod.POST);
     }
 

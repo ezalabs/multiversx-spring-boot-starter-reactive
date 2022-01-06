@@ -1,10 +1,11 @@
-package software.crldev.elrondspringbootstarterreactive.sender;
+package software.crldev.elrondspringbootstarterreactive.interactor.transaction;
 
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
 import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.GasLimit;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
 
 /**
@@ -22,6 +23,7 @@ public class TransactionRequest {
     Balance value;
     @NonNull
     PayloadData data;
+    GasLimit gasLimit;
 
 }
 

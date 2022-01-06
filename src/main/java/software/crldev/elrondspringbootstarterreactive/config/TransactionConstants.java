@@ -1,5 +1,7 @@
 package software.crldev.elrondspringbootstarterreactive.config;
 
+import java.math.BigInteger;
+
 /**
  * Class containing static config values used in Transaction construction and validation
  *
@@ -11,5 +13,6 @@ public class TransactionConstants {
     public static final Integer TRANSACTION_VERSION_TX_HASH_SIGN = 2;
     public static final Integer SIGNATURE_LENGTH = 64;
     public static final Integer SIGNATURE_LENGTH_HEX = SIGNATURE_LENGTH * 2;
+    public static final BigInteger SC_CALL_GAS_LIMIT = BigInteger.valueOf(12_000_000L);
 
 }

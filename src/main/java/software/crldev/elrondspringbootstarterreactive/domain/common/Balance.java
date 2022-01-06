@@ -49,7 +49,7 @@ public class Balance {
     }
 
     /**
-     * Creates an Balance object from
+     * Creates a Balance object from
      * a String representing EGLD (with denomination)
      *
      * @param value - EGLD String value

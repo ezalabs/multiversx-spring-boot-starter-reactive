@@ -7,6 +7,8 @@ import software.crldev.elrondspringbootstarterreactive.interactor.block.ErdBlock
 import software.crldev.elrondspringbootstarterreactive.interactor.block.ErdBlockInteractorImpl;
 import software.crldev.elrondspringbootstarterreactive.interactor.network.ErdNetworkInteractor;
 import software.crldev.elrondspringbootstarterreactive.interactor.network.ErdNetworkInteractorImpl;
+import software.crldev.elrondspringbootstarterreactive.interactor.smartcontract.ErdSmartContractInteractor;
+import software.crldev.elrondspringbootstarterreactive.interactor.smartcontract.ErdSmartContractInteractorImpl;
 import software.crldev.elrondspringbootstarterreactive.interactor.transaction.ErdTransactionInteractor;
 import software.crldev.elrondspringbootstarterreactive.interactor.transaction.ErdTransactionInteractorImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,12 @@ public class ErdInteractorAutoConfiguration {
 
     @Bean
     public ErdTransactionInteractor transactionInteractor() {
-        return new ErdTransactionInteractorImpl(erdProxyClient);
+        return new ErdTransactionInteractorImpl(erdProxyClient, accountInteractor());
+    }
+
+    @Bean
+    public ErdSmartContractInteractor smartContractInteractor() {
+        return new ErdSmartContractInteractorImpl(erdProxyClient, transactionInteractor());
     }
 
     @Bean

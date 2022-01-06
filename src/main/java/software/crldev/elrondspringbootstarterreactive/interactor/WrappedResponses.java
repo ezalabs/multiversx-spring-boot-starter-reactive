@@ -122,4 +122,15 @@ public class WrappedResponses {
 
     }
 
+    @Builder
+    @Getter
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonDeserialize(builder = ScQueryResponse.ScQueryResponseBuilder.class)
+    public static class ScQueryResponse {
+
+        @JsonProperty("data")
+        private final ScQueryResult result;
+
+    }
+
 }

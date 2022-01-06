@@ -39,14 +39,13 @@ public class ErdNetworkConfigSupplier {
                 .chainId("D")
                 .gasPerDataByte(1500L)
                 .minGasLimit(BigInteger.valueOf(70_000L))
-                .minGasPrice(BigInteger.valueOf(1000000000L))
+                .minGasPrice(BigInteger.valueOf(1_000_000_000L))
                 .minTransactionVersion(DEFAULT_VERSION)
                 .build();
     }
 
-
     /**
-     * method called at startup
+     * Method called at startup
      * which is using the NetworkInteractor
      * to synchronise the configuration from the network
      */
@@ -57,9 +56,9 @@ public class ErdNetworkConfigSupplier {
                     config = r;
                     log.info("Elrond network configuration synced. Chain ID: {}", r.getChainId());
                 })
-                .doOnError(e -> {
-                    log.info("Could not sync Elrond network configuration at startup. Using defaults for chain ID {}.", config.getChainId());
-                })
+                .doOnError(e ->
+                        log.error("Could not sync Elrond network configuration at startup. Using default configs for chain ID {}.",
+                                config.getChainId()))
                 .subscribe();
     }
 

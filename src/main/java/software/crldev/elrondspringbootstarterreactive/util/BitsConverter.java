@@ -4,6 +4,9 @@ import software.crldev.elrondspringbootstarterreactive.error.exception.CannotCon
 
 import java.io.ByteArrayOutputStream;
 
+/**
+ * author Elrond Network - elrond-sdk-erdjava
+ */
 public class BitsConverter {
 
     public static byte[] convertBits(byte[] data, int fromBits, int toBits, boolean pad) {

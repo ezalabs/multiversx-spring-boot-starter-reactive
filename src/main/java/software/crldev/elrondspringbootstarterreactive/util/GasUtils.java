@@ -13,7 +13,7 @@ import java.math.BigInteger;
 public class GasUtils {
 
     /**
-     * Method used for computing gas cost of an Transaction based on payload data
+     * Method used for computing gas cost of a Transaction based on payload data
      *
      * @param data - data to process
      * @return - gas cost in BigInteger format

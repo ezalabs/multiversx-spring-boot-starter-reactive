@@ -41,6 +41,7 @@ public class PayloadData {
         return isNullOrEmpty(encoded) ? PayloadData.empty() : new PayloadData(Base64.decode(encoded));
     }
 
+
     /**
      * Creates an empty PayloadData
      *

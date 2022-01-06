@@ -14,6 +14,7 @@ import lombok.Getter;
 public enum ErrorMessage {
 
     WRONG_NETWORK_ADDRESS("Wrong network address. %s network required."),
+    INVALID_GATEWAY("Invalid gateway input. Must be mainnet, testnet or devnet."),
     INVALID_HEX_VALUE("Could not create address. Invalid hex value %s."),
     PRIVATE_KEY_LENGTH("Invalid private key length: %s"),
     PAYLOAD("Payload cannot be null."),
@@ -34,7 +35,9 @@ public enum ErrorMessage {
     INVALID_SENT_TRANSACTIONS("Transactions sent were invalid and not processed."),
     INVALID_CHAIN_ID("Invalid chainID: %s."),
     MISSING_TRANSACTIONS_REQUESTS("Missing transactions request, could not create sendables."),
-    NEGATIVE_GAS("Negative gas: %s.");
+    NEGATIVE_GAS("Negative gas: %s."),
+    FUNCTION_ARGS_NULL("Function args is empty or null"),
+    FUNCTION_NAME("Function name cannot be null or empty");
 
     private final String value;
 

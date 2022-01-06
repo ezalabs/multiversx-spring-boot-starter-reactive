@@ -1,12 +1,11 @@
 package software.crldev.elrondspringbootstarterreactive.util;
 
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
 import org.junit.jupiter.api.Test;
-import software.crldev.elrondspringbootstarterreactive.util.GasUtils;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
 
 import java.math.BigInteger;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GasUtilsTest {
 
@@ -18,4 +17,5 @@ class GasUtilsTest {
         var expectedCostEmpty = BigInteger.valueOf(70000);
         assertEquals(expectedCostEmpty, GasUtils.computeGasCost(PayloadData.empty()));
     }
+
 }

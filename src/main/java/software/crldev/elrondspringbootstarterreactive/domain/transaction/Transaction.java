@@ -25,6 +25,7 @@ import static software.crldev.elrondspringbootstarterreactive.util.GasUtils.comp
 @Data
 public class Transaction implements Signable {
 
+    private Boolean isEstimation = Boolean.FALSE;
     private Nonce nonce = Nonce.fromLong(0L);
     private ChainID chainID = ChainID.fromString(ErdNetworkConfigSupplier.config.getChainId());
     private Balance value = Balance.zero();
@@ -49,38 +50,12 @@ public class Transaction implements Signable {
     }
 
     /**
-     * Method use to create a Sendable representation of the transaction
+     * Method used to create a Sendable representation of the transaction
      * used for submitting send/sendMultiple/simulate requests to the TransactionInteractor
      *
      * @return - instance of SendableTransaction
      */
     public Sendable toSendable() {
-        return generateSender(false);
-    }
-
-    /**
-     * Method use to create a Sendable representation of the transaction
-     * used for submitting estimate request to the TransactionInteractor
-     *
-     * @return - instance of SendableTransaction
-     */
-    public Sendable toSendableForEstimation() {
-        return generateSender(true);
-    }
-
-    /**
-     * Setter
-     * Used for setting PayloadData
-     * and also computing GasCost for the data
-     *
-     * @param payloadData - data input value
-     */
-    public void setPayloadData(PayloadData payloadData) {
-        this.payloadData = payloadData;
-        this.gasLimit = GasLimit.fromNumber(computeGasCost(payloadData));
-    }
-
-    private Sendable generateSender(boolean isEstimation) {
         var sendableBuilder = Sendable.builder()
                 .chainId(chainID.getValue())
                 .nonce(nonce.getValue())
@@ -99,7 +74,19 @@ public class Transaction implements Signable {
     }
 
     /**
-     * This inner class represents a Transaction in a sendable format
+     * Setter
+     * Used for setting PayloadData
+     * and also computing GasCost for the data
+     *
+     * @param payloadData - data input value
+     */
+    public void setPayloadData(PayloadData payloadData) {
+        this.payloadData = payloadData;
+        this.gasLimit = GasLimit.fromNumber(computeGasCost(payloadData));
+    }
+
+    /**
+     * This inner class represents a Transaction in a sendable format for API calls
      * used for the TransactionInteractor
      */
     @Value

@@ -30,7 +30,11 @@ public enum ApiResourceURI {
     HYPERBLOCK_BY_NONCE("hyperblock/by-nonce/%s"),
     HYPERBLOCK_BY_HASH("hyperblock/by-hash/%s"),
     BLOCK_BY_NONCE_FROM_SHARD("block/%s/by-nonce/%s"),
-    BLOCK_BY_HASH_FROM_SHARD("block/%s/by-hash/%s");
+    BLOCK_BY_HASH_FROM_SHARD("block/%s/by-hash/%s"),
+    QUERY_SMART_CONTRACT("vm-values/query"),
+    QUERY_SMART_CONTRACT_HEX("vm-values/hex"),
+    QUERY_SMART_CONTRACT_STRING("vm-values/string"),
+    QUERY_SMART_CONTRACT_INT("vm-values/int");
 
     private final String URI;
 

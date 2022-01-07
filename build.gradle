@@ -11,7 +11,7 @@ plugins {
 group = 'software.crldev'
 sourceCompatibility = '11'
 setArchivesBaseName('elrond-spring-boot-starter-reactive')
-setVersion('1.0.3')
+setVersion('1.0.4')
 
 repositories {
     mavenLocal()
@@ -34,8 +34,8 @@ configurations.all {
 
 dependencies {
 
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.5.4'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '2.5.4'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.6.2'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '2.6.2'
 
     implementation group: 'org.bouncycastle', name: 'bcmail-jdk15on', version: '1.69'
     implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.69'
@@ -43,7 +43,7 @@ dependencies {
     implementation group: 'org.bouncycastle', name: 'bcprov-ext-jdk15on', version: '1.69'
     implementation group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.15.10'
 
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.5.4'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.6.2'
     testImplementation 'io.projectreactor:reactor-test:3.4.13'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'

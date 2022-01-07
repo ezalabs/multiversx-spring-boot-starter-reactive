@@ -33,5 +33,9 @@ Fixed spring.factories for ErdSimpleTransactionSender.
 - Added SC API & domain objects
 - Removed ErdSimpleTransactionSender and moved methods as overloaded to TransactionInteractor
 - Refactored gateway selection properties mechanism
-- Upgraded Log4J version to v2.15.0 to prevent vulnerability
+- Upgraded Log4J version to v2.17.1 to prevent vulnerability
 - Minor bug fixes
+
+## [1.0.4] - 07-Jan-2022
+
+- Updated Spring Boot version

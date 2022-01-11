@@ -1,16 +1,24 @@
 package software.crldev.elrondspringbootstarterreactive.domain.wallet;
 
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.Transaction;
-import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
-import software.crldev.elrondspringbootstarterreactive.error.exception.PrivateKeyHexSizeException;
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.Mockito;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.util.ResourceUtils;
+import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.Transaction;
+import software.crldev.elrondspringbootstarterreactive.error.exception.InvalidPemFileException;
+import software.crldev.elrondspringbootstarterreactive.error.exception.PrivateKeyHexSizeException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 class WalletTest {
 
     String publicKeyHex = "bf86ad970aa3c93c2382889c0a4fba4728b5b851634d57ccd65dcddeda8c8bb0";
@@ -36,6 +44,66 @@ class WalletTest {
 
         assertEquals(privateKeyBuffer, wallet.getPrivateKey());
         assertEquals(publicKeyHex, wallet.getPublicKeyHex());
+    }
+
+    @Test
+    void testPem_success_fromFile() throws Exception {
+        var pemFile = ResourceUtils.getFile("classpath:devnetAccount1.pem");
+        var wallet = Wallet.fromPemFile(pemFile);
+
+        assertEquals(publicKeyHex, wallet.getPublicKeyHex());
+        assertEquals(privateKeyHex, Hex.toHexString(wallet.getPrivateKey()));
+    }
+
+    @Test
+    void testPem_success_fromFilePart() throws Exception {
+        var pemFile = ResourceUtils.getFile("classpath:devnetAccount1.pem");
+
+        var pemFilePart = Mockito.mock(FilePart.class);
+        var dataBuffer = Mockito.mock(DataBuffer.class);
+
+        when(dataBuffer.asInputStream()).thenReturn(new FileInputStream(pemFile));
+        when(pemFilePart.content()).thenReturn(Flux.just(dataBuffer));
+
+        StepVerifier.create(Wallet.fromPemFile(pemFilePart))
+                .assertNext(wallet -> {
+                    assertEquals(publicKeyHex, wallet.getPublicKeyHex());
+                    assertEquals(privateKeyHex, Hex.toHexString(wallet.getPrivateKey()));
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void testPem_fail() throws Exception {
+        var pemFileInvalidPem = ResourceUtils.getFile("classpath:invalid.pem");
+
+        assertThrows(InvalidPemFileException.class,
+                () -> Wallet.fromPemFile(pemFileInvalidPem));
+
+        var pemFileInvalid = Mockito.mock(File.class);
+        when(pemFileInvalid.getName()).thenReturn(null);
+
+        assertThrows(InvalidPemFileException.class,
+                () -> Wallet.fromPemFile(pemFileInvalid));
+
+        var pemFilePart = Mockito.mock(FilePart.class);
+        var dataBuffer = Mockito.mock(DataBuffer.class);
+
+        when(dataBuffer.asInputStream()).thenReturn(new FileInputStream(pemFileInvalidPem));
+        when(pemFilePart.content()).thenReturn(Flux.just(dataBuffer));
+
+        StepVerifier.create(Wallet.fromPemFile(pemFilePart))
+                .expectError(InvalidPemFileException.class);
+    }
+
+    @Test
+    void test_fromMnemonic() {
+        var mnemonicPhrase = List.of("helmet", "kingdom", "fire", "surprise", "asthma",
+                "tourist", "junk", "talent", "delay", "bleak", "scene", "crazy", "squirrel", "credit",
+                "lamp", "raise", "peanut", "ensure", "inhale", "object", "endorse", "sound", "return",
+                "fish");
+
+        assertEquals(publicKeyHex, Wallet.fromMnemonic(mnemonicPhrase, 0).getPublicKeyHex());
     }
 
     @Test

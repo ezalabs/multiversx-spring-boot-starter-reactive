@@ -9,9 +9,9 @@ import software.crldev.elrondspringbootstarterreactive.domain.common.Nonce;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.ChainID;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.Transaction;
-import software.crldev.elrondspringbootstarterreactive.domain.wallet.WalletCreator;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
+import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
 
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
@@ -31,7 +31,7 @@ class TransactionTest {
 
     @Test
     void verify_creation_signature_and_sendable() throws FileNotFoundException {
-        var wallet = WalletCreator.fromPemFile(ResourceUtils.getFile("classpath:devnetAccount1.pem"));
+        var wallet = Wallet.fromPemFile(ResourceUtils.getFile("classpath:devnetAccount1.pem"));
 
         var transaction = new Transaction();
         verifyDefaults(transaction);
@@ -43,17 +43,9 @@ class TransactionTest {
         transaction.setReceiver(Address.fromBech32(receiverAddress));
         transaction.setPayloadData(PayloadData.fromString(dataString));
 
-//        var estimationSendable = transaction.toSendableForEstimation();
-//        assertEquals(1L, estimationSendable.getNonce());
-//        assertEquals(value, estimationSendable.getValue());
-//        assertEquals(receiverAddress, estimationSendable.getReceiver());
-//        assertEquals(senderAddress, estimationSendable.getSender());
-//        assertNull(estimationSendable.getGasLimit());
-//        assertNull(estimationSendable.getGasPrice());
-
-        var regularSendable = transaction.toSendable();
-        assertEquals(transaction.getGasLimit().getValue(), regularSendable.getGasLimit());
-        assertEquals(transaction.getGasPrice().getValue(), regularSendable.getGasPrice());
+        var sendable = transaction.toSendable();
+        assertEquals(transaction.getGasLimit().getValue(), sendable.getGasLimit());
+        assertEquals(transaction.getGasPrice().getValue(), sendable.getGasPrice());
 
         wallet.sign(transaction);
 

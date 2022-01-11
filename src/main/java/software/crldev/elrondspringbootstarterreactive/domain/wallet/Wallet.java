@@ -1,5 +1,7 @@
 package software.crldev.elrondspringbootstarterreactive.domain.wallet;
 
+import org.springframework.http.codec.multipart.FilePart;
+import reactor.core.publisher.Mono;
 import software.crldev.elrondspringbootstarterreactive.config.WalletConstants;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.Signable;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.Signature;
@@ -11,6 +13,11 @@ import lombok.Value;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.bouncycastle.util.encoders.Hex;
+import software.crldev.elrondspringbootstarterreactive.util.MnemonicsUtils;
+import software.crldev.elrondspringbootstarterreactive.util.PemUtils;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * Value object for Wallet
@@ -37,6 +44,42 @@ public class Wallet {
         var publicKeyParameters = privateKeyParameters.generatePublicKey();
 
         return new Wallet(publicKeyParameters.getEncoded(), privateKey);
+    }
+
+    /**
+     * Method used for creating Wallet instance
+     * using private key from PEM file (File format)
+     *
+     * @param pem - required PEM file
+     * @return - an instance of Wallet
+     */
+    public static Wallet fromPemFile(File pem) {
+        return fromPrivateKeyHex(PemUtils.extractKeyHex(pem));
+    }
+
+    /**
+     * Method used for creating Wallet instance
+     * using private key from PEM file (FilePart format)
+     * Used in reactive file input
+     *
+     * @param pem - required PEM file
+     * @return - an instance of Wallet
+     */
+    public static Mono<Wallet> fromPemFile(FilePart pem) {
+        return PemUtils.extractKeyHex(pem).map(Wallet::fromPrivateKeyHex);
+    }
+
+    /**
+     * Method used for creating Wallet instance
+     * using mnemonics
+     *
+     * @param mnemonics    - mnemonic phrase in a List
+     * @param accountIndex - long value of index
+     * @return - an instance of Wallet
+     */
+    public static Wallet fromMnemonic(List<String> mnemonics, long accountIndex) {
+        var privateKey = MnemonicsUtils.privateKeyFromMnemonic(mnemonics, accountIndex);
+        return Wallet.fromPrivateKeyBuffer(privateKey);
     }
 
     /**

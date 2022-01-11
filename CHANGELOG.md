@@ -39,3 +39,9 @@ Fixed spring.factories for ErdSimpleTransactionSender.
 ## [1.0.4] - 07-Jan-2022
 
 - Updated Spring Boot version
+
+## [1.0.5] - 11-Jan-2022
+
+- Removed WalletCreator
+- Added creation from PEM & mnemonics to Wallet main class
+- Added support for PEM creation through reactive FilePart

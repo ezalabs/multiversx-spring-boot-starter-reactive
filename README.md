@@ -34,14 +34,22 @@ To use the starter, add the following dependency to the dependencies section of 
 <dependency>
   <groupId>software.crldev</groupId>
   <artifactId>elrond-spring-boot-starter-reactive</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
 </dependency>
 ```
 - Gradle (in your build.gradle file)
 ```
 dependencies {
-  implementation(group: 'software.crldev', name: 'elrond-spring-boot-starter-reactive', version: '1.0.4')
+  implementation(group: 'software.crldev', name: 'elrond-spring-boot-starter-reactive', version: '1.0.5')
 }
+```
+- And some other required dependencies for cryptographic functions:
+```
+implementation group: 'org.bouncycastle', name: 'bcmail-jdk15on', version: '1.69'
+implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.69'
+implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.69'
+implementation group: 'org.bouncycastle', name: 'bcprov-ext-jdk15on', version: '1.69'
+implementation group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.15.10'
 ```
 
 ## Documentation
@@ -67,18 +75,14 @@ An **[Address](src/main/java/software/crldev/elrondspringbootstarterreactive/dom
 - fromBech32 (address in Bech32 String)
 ```
 
-A **[Wallet](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/wallet/Wallet.java)** is used for **signing transactions**. It can be instantiated in two ways:
+A **[Wallet](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/wallet/Wallet.java)** is used for **signing transactions**. It can be instantiated in multiple ways:
 ```
 - fromPrivateKeyBuffer (private key in byte[] format)
 - fromPrivateKeyHex (private key in HEX String)
-```
-
-As creating a wallet directly with the above methods is a bit out of hand as we rarely have the plain private key, we can use the **WalletCreator** component as the best approach.
-
-**[WalletCreator](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/wallet/WalletCreator.java)** has two methods (for now) for creating Wallets:
-- fromPemFile (using a PEM file as an input)
+- fromPemFile (using a PEM file as an input) (both File & reactive FilePart supported)
 - fromMnemonic (using a mnemonic phrase)
 - fromKeyStore (not yet implemented)
+```
 
 We can generate a mnemonic phrase by using **[MnemonicsUtils](src/main/java/software/crldev/elrondspringbootstarterreactive/util/MnemonicsUtils.java)**.
 

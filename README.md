@@ -207,6 +207,9 @@ Also, for querying we can use the following object:
 
 For more details regarding the implementation, please consult the project's **[official Javadoc documentation](https://crldev.software/docs/elrond-spring-boot-starter-reactive/)**.
 
+## Demo
+
+You can find an example of a spring-boot service using this framework **[HERE](https://github.com/crldev-software/elrond-spring-boot-demo)**.
 
 ## Next features
 

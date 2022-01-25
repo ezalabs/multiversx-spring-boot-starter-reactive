@@ -36,8 +36,12 @@ public enum ErrorMessage {
     INVALID_PEM_FILE("Invalid PEM file. Error: %s."),
     MISSING_TRANSACTIONS_REQUESTS("Missing transactions request, could not create sendables."),
     NEGATIVE_GAS("Negative gas: %s."),
-    FUNCTION_ARGS_NULL("Function args is empty or null"),
-    FUNCTION_NAME("Function name cannot be null or empty");
+    FUNCTION_ARGS_NULL("Function args is empty or nul.l"),
+    FUNCTION_NAME("Function name cannot be null or empty."),
+    TOKEN_NAME("Invalid ESDT token name. Length must be between 3 and 20, alphanumeric chars only."),
+    TOKEN_TICKER("Invalid ESDT token ticker. Length must be between 3 and 10, alphanumeric chars only."),
+    TOKEN_DECIMALS("Invalid number of decimals for ESDT token. Numerical value must be even and between 0 and 18."),
+    INITIAL_SUPPLY("Invalid number for initial supply of ESDT token. Numerical value must be even and between 0 and 18.");
 
     private final String value;
 

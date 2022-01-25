@@ -142,22 +142,22 @@ publishing {
     }
 }
 
-def decodeBase64 = { String value -> new String(Base64.getDecoder().decode(value)) }
+//def decodeBase64 = { String value -> new String(Base64.getDecoder().decode(value)) }
+//
+//nexusPublishing {
+//    repositories {
+//        sonatype {
+//            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+//            username.set(decodeBase64(System.getenv("OSSRH_USER")))
+//            password.set(decodeBase64(System.getenv("OSSRH_PASSWORD")))
+//        }
+//    }
+//}
 
-nexusPublishing {
-    repositories {
-        sonatype {
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-            username.set(decodeBase64(System.getenv("OSSRH_USER")))
-            password.set(decodeBase64(System.getenv("OSSRH_PASSWORD")))
-        }
-    }
-}
-
-signing {
-    def key = decodeBase64(System.getenv("SIGNING_KEY"))
-    def password = decodeBase64(System.getenv("SIGNING_PASSWORD"))
-
-    useInMemoryPgpKeys(key, password)
-    sign publishing.publications.mavenJava
-}
+//signing {
+//    def key = decodeBase64(System.getenv("SIGNING_KEY"))
+//    def password = decodeBase64(System.getenv("SIGNING_PASSWORD"))
+//
+//    useInMemoryPgpKeys(key, password)
+//    sign publishing.publications.mavenJava
+//}

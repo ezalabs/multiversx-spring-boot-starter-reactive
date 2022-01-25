@@ -35,5 +35,4 @@ public class ScFunction {
     public PayloadData getPayloadData() {
         return PayloadData.fromString(this.functionName + this.args.toString());
     }
-
 }

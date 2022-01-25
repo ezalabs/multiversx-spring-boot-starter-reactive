@@ -1,8 +1,7 @@
 package software.crldev.elrondspringbootstarterreactive.domain.smartcontract;
 
 import lombok.Value;
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.Transaction;
-import software.crldev.elrondspringbootstarterreactive.error.exception.FunctionNameException;
+import software.crldev.elrondspringbootstarterreactive.error.ErrorMessage;
 
 import static io.netty.util.internal.StringUtil.isNullOrEmpty;
 
@@ -27,9 +26,9 @@ public class FunctionName {
      */
     public static FunctionName fromString(String name) {
         if (isNullOrEmpty(name))
-            throw new FunctionNameException();
+            throw new IllegalArgumentException(ErrorMessage.FUNCTION_NAME.getValue());
 
-        return new FunctionName(name.trim());
+        return new FunctionName(name.replaceAll("\\s+", ""));
     }
 
     /**

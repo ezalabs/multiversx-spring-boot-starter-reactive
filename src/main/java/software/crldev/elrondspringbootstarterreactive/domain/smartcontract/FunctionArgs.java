@@ -3,7 +3,7 @@ package software.crldev.elrondspringbootstarterreactive.domain.smartcontract;
 import lombok.Value;
 import org.apache.logging.log4j.util.Strings;
 import org.bouncycastle.util.encoders.Hex;
-import software.crldev.elrondspringbootstarterreactive.error.exception.FunctionArgsException;
+import software.crldev.elrondspringbootstarterreactive.error.ErrorMessage;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +37,7 @@ public class FunctionArgs {
     }
 
     /**
-     * Creates a FunctionArgs objectt from String array
+     * Creates a FunctionArgs object from String array
      *
      * @param values - string values
      * @return - an instance of FunctionArgs
@@ -57,13 +57,13 @@ public class FunctionArgs {
 
     private void verifyArgs(String[] args) {
         if (args.length == 0 || hasEmptyOrNullArg(args))
-            throw new FunctionArgsException();
+            throw new IllegalArgumentException(ErrorMessage.FUNCTION_ARGS_NULL.getValue());
 
         Stream.of(args)
                 .findAny()
                 .map(a -> {
                     if (isNullOrEmpty(a)) {
-                        throw new FunctionArgsException();
+                        throw new IllegalArgumentException(ErrorMessage.FUNCTION_ARGS_NULL.getValue());
                     }
                     return a;
                 });

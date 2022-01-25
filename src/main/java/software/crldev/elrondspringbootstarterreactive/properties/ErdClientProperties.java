@@ -24,7 +24,7 @@ public class ErdClientProperties {
     }
 
     public void setGateway(String gateway) {
-        switch (gateway.toLowerCase(Locale.ROOT).trim()) {
+        switch (gateway.toLowerCase(Locale.ROOT).strip()) {
             case "devnet":
                 this.gateway = processUrl("devnet-gateway");
                 break;

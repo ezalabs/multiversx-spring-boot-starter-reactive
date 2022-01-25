@@ -3,6 +3,9 @@ package software.crldev.elrondspringbootstarterreactive.interactor.smartcontract
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,6 +22,7 @@ import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.Func
 import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionName;
 import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ScFunction;
 import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ScQuery;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.GasLimit;
 import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
 import software.crldev.elrondspringbootstarterreactive.interactor.WrappedResponses;
 import software.crldev.elrondspringbootstarterreactive.interactor.transaction.ErdTransactionInteractor;
@@ -26,7 +30,9 @@ import software.crldev.elrondspringbootstarterreactive.interactor.transaction.Tr
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.Stream;
 
+import static java.util.Objects.nonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -44,9 +50,11 @@ class ErdSmartContractInteractorTest {
     @Mock
     ErdTransactionInteractor tInteractor;
 
-    Address callerAddress = Address.fromBech32("erd1h7r2m9c250yncguz3zwq5na6gu5ttwz3vdx40nxkthxaak5v3wcqtpkvkj");
-    Address scAddress = Address.fromBech32("erd1gklqdv77my5y8n75hszv737gq54q9xk0tmzdh8v5vkfstd64aw7ser9nfr");
-    Wallet wallet = Wallet.fromPrivateKeyHex("8442d0bcadbae1b75eff1165f1e3a61f120bddbb440393d8ba3c366342ee4f62");
+    private static final BigInteger GAS_LIMIT = BigInteger.valueOf(10_000_000_000_000L);
+
+    private static final Address callerAddress = Address.fromBech32("erd1h7r2m9c250yncguz3zwq5na6gu5ttwz3vdx40nxkthxaak5v3wcqtpkvkj");
+    private static final Address scAddress = Address.fromBech32("erd1gklqdv77my5y8n75hszv737gq54q9xk0tmzdh8v5vkfstd64aw7ser9nfr");
+    private static final Wallet wallet = Wallet.fromPrivateKeyHex("8442d0bcadbae1b75eff1165f1e3a61f120bddbb440393d8ba3c366342ee4f62");
 
     ScQuery query = ScQuery.builder()
             .callerAddress(callerAddress)
@@ -61,8 +69,9 @@ class ErdSmartContractInteractorTest {
         interactor = new ErdSmartContractInteractorImpl(client, tInteractor);
     }
 
-    @Test
-    void callFunction() {
+    @ParameterizedTest
+    @MethodSource("functionRequestDataProvider")
+    void callFunction(final ScFunction functionRequest) {
         var hash = "699ae03e6f9a18cb8b1f131b061a46a8b7dd96dfa3fe24861f03aa824a462920";
 
         var requestCaptor = ArgumentCaptor.forClass(TransactionRequest.class);
@@ -70,20 +79,13 @@ class ErdSmartContractInteractorTest {
         when(tInteractor.sendTransaction(eq(wallet), requestCaptor.capture()))
                 .thenReturn(Mono.just(TransactionHash.builder().hash(hash).build()));
 
-        var functionRequest = ScFunction.builder()
-                .smartContractAddress(scAddress)
-                .functionName(FunctionName.fromString("delegate"))
-                .args(FunctionArgs.fromString(scAddress.getBech32()))
-                .value(Balance.zero())
-                .build();
-
         StepVerifier.create(interactor.callFunction(wallet, functionRequest))
                 .assertNext(r -> {
                     var request = requestCaptor.getValue();
 
                     assertEquals(functionRequest.getSmartContractAddress().getBech32(), request.getReceiverAddress().getBech32());
                     assertEquals(functionRequest.getValue(), request.getValue());
-                    assertEquals(TransactionConstants.SC_CALL_GAS_LIMIT, request.getGasLimit().getValue());
+                    assertEquals(getExpectedGasLimit(functionRequest), request.getGasLimit().getValue());
                     assertEquals(functionRequest.getPayloadData(), request.getData());
                     assertEquals(functionRequest.getFunctionName().getValue(), request.getData().toString().split("@")[0]);
 
@@ -163,4 +165,22 @@ class ErdSmartContractInteractorTest {
                 }, HttpMethod.POST);
     }
 
+    private BigInteger getExpectedGasLimit(final ScFunction scFunction) {
+        final var gasLimit = scFunction.getGasLimit();
+        return nonNull(gasLimit) ? gasLimit.getValue() : TransactionConstants.SC_CALL_GAS_LIMIT;
+    }
+
+    private static Stream<Arguments> functionRequestDataProvider() {
+        final var scFunction = ScFunction.builder()
+                .smartContractAddress(scAddress)
+                .functionName(FunctionName.fromString("delegate"))
+                .args(FunctionArgs.fromString(scAddress.getBech32()))
+                .value(Balance.zero())
+                .build();
+        final var gasLimit = GasLimit.fromNumber(GAS_LIMIT);
+        return Stream.of(
+                Arguments.of(scFunction),
+                Arguments.of(scFunction.toBuilder().gasLimit(gasLimit).build())
+        );
+    }
 }

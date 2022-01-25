@@ -14,6 +14,8 @@ import software.crldev.elrondspringbootstarterreactive.interactor.WrappedRespons
 import software.crldev.elrondspringbootstarterreactive.interactor.transaction.ErdTransactionInteractor;
 import software.crldev.elrondspringbootstarterreactive.interactor.transaction.TransactionRequest;
 
+import static java.util.Objects.nonNull;
+
 /**
  * Interface used for interaction with smart contracts on the network
  *
@@ -33,7 +35,7 @@ public class ErdSmartContractInteractorImpl implements ErdSmartContractInteracto
                         .receiverAddress(function.getSmartContractAddress())
                         .data(function.getPayloadData())
                         .value(function.getValue())
-                        .gasLimit(GasLimit.fromNumber(TransactionConstants.SC_CALL_GAS_LIMIT))
+                        .gasLimit(extractGasLimit(function))
                         .build());
     }
 
@@ -68,5 +70,9 @@ public class ErdSmartContractInteractorImpl implements ErdSmartContractInteracto
                 .post(ApiResourceURI.QUERY_SMART_CONTRACT_INT.getURI(),
                         function.toSendable(),
                         ScQueryResultInt.class);
+    }
+
+    private GasLimit extractGasLimit(final ScFunction function) {
+        return nonNull(function.getGasLimit()) ? function.getGasLimit() : GasLimit.fromNumber(TransactionConstants.SC_CALL_GAS_LIMIT);
     }
 }

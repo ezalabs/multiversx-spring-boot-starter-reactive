@@ -34,13 +34,13 @@ To use the starter, add the following dependency to the dependencies section of 
 <dependency>
   <groupId>software.crldev</groupId>
   <artifactId>elrond-spring-boot-starter-reactive</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6</version>
 </dependency>
 ```
 - Gradle (in your build.gradle file)
 ```
 dependencies {
-  implementation(group: 'software.crldev', name: 'elrond-spring-boot-starter-reactive', version: '1.0.5')
+  implementation(group: 'software.crldev', name: 'elrond-spring-boot-starter-reactive', version: '1.0.6')
 }
 ```
 - And some other required dependencies for cryptographic functions:

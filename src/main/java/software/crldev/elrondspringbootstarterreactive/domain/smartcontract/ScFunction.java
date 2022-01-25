@@ -13,7 +13,7 @@ import software.crldev.elrondspringbootstarterreactive.domain.transaction.Payloa
  *
  * @author carlo_stanciu
  */
-@Builder
+@Builder(toBuilder = true)
 @Value
 public class ScFunction {
 

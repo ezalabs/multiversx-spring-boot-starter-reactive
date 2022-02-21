@@ -4,7 +4,7 @@ import lombok.Value;
 import org.bouncycastle.util.encoders.Hex;
 
 /**
- * Value object for transaction Hash
+ * Value object for Hash
  *
  * @author carlo_stanciu
  */
@@ -18,7 +18,7 @@ public class Hash {
     }
 
     /**
-     * Creates an Hash object from
+     * Creates a Hash object from
      * a String value
      *
      * @param hash - value in String format
@@ -60,7 +60,7 @@ public class Hash {
     /**
      * Getter
      *
-     * @return -
+     * @return - byte[]
      */
     public byte[] getValue() {
         return value;

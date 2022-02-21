@@ -8,8 +8,8 @@ import org.bouncycastle.util.encoders.Hex;
 
 import java.util.Arrays;
 
-import static software.crldev.elrondspringbootstarterreactive.config.TransactionConstants.SIGNATURE_LENGTH;
-import static software.crldev.elrondspringbootstarterreactive.config.TransactionConstants.SIGNATURE_LENGTH_HEX;
+import static software.crldev.elrondspringbootstarterreactive.config.constants.TransactionConstants.SIGNATURE_LENGTH;
+import static software.crldev.elrondspringbootstarterreactive.config.constants.TransactionConstants.SIGNATURE_LENGTH_HEX;
 
 /**
  * Value object for Signature

@@ -11,7 +11,7 @@ plugins {
 group = 'software.crldev'
 sourceCompatibility = '11'
 setArchivesBaseName('elrond-spring-boot-starter-reactive')
-setVersion('1.0.6')
+setVersion('1.1.0')
 
 repositories {
     mavenLocal()
@@ -48,6 +48,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '4.3.1'
 }
 
 def rootPackage = 'software.crldev.elrondspringbootstarterreactive'
@@ -71,8 +72,8 @@ jacocoTestCoverageVerification {
                         rootPackage + '.ErdClientAutoConfiguration',
                         rootPackage + '.ErdInteractorAutoConfiguration',
                         rootPackage + '.interactor.WrappedResponses',
+                        rootPackage + '.config.constants.*',
                         rootPackage + '.config.ErdClientConfig',
-                        rootPackage + '.config.AddressConstants',
                         rootPackage + '.config.ErdNetworkConfigSupplier',
                 ]
             }
@@ -142,22 +143,22 @@ publishing {
     }
 }
 
-//def decodeBase64 = { String value -> new String(Base64.getDecoder().decode(value)) }
-//
-//nexusPublishing {
-//    repositories {
-//        sonatype {
-//            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-//            username.set(decodeBase64(System.getenv("OSSRH_USER")))
-//            password.set(decodeBase64(System.getenv("OSSRH_PASSWORD")))
-//        }
-//    }
-//}
+def decodeBase64 = { String value -> new String(Base64.getDecoder().decode(value)) }
 
-//signing {
-//    def key = decodeBase64(System.getenv("SIGNING_KEY"))
-//    def password = decodeBase64(System.getenv("SIGNING_PASSWORD"))
-//
-//    useInMemoryPgpKeys(key, password)
-//    sign publishing.publications.mavenJava
-//}
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            username.set(decodeBase64(System.getenv("OSSRH_USER")))
+            password.set(decodeBase64(System.getenv("OSSRH_PASSWORD")))
+        }
+    }
+}
+
+signing {
+    def key = decodeBase64(System.getenv("SIGNING_KEY"))
+    def password = decodeBase64(System.getenv("SIGNING_PASSWORD"))
+
+    useInMemoryPgpKeys(key, password)
+    sign publishing.publications.mavenJava
+}

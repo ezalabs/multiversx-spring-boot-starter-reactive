@@ -26,17 +26,17 @@ public class ErdAccountInteractorImpl implements ErdAccountInteractor {
     }
 
     @Override
-    public Mono<AddressBalance> getBalance(Address address) {
+    public Mono<AccountBalance> getBalance(Address address) {
         return client
                 .get(format(ApiResourceURI.ACCOUNT_BALANCE.getURI(), address.getBech32()),
-                        AddressBalance.class);
+                        AccountBalance.class);
     }
 
     @Override
-    public Mono<AddressNonce> getNonce(Address address) {
+    public Mono<AccountNonce> getNonce(Address address) {
         return client
                 .get(format(ApiResourceURI.ACCOUNT_NONCE.getURI(), address.getBech32()),
-                        AddressNonce.class);
+                        AccountNonce.class);
     }
 
     @Override
@@ -48,10 +48,10 @@ public class ErdAccountInteractorImpl implements ErdAccountInteractor {
     }
 
     @Override
-    public Mono<AddressStorageValue> getStorageValue(Address address, String key) {
+    public Mono<AccountStorageValue> getStorageValue(Address address, String key) {
         return client
                 .get(format(ApiResourceURI.ACCOUNT_STORAGE_VALUE.getURI(), address.getBech32(), key),
-                        AddressStorageValue.class);
+                        AccountStorageValue.class);
     }
 
     @Override

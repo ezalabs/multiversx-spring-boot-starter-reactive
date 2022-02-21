@@ -1,11 +1,10 @@
 package software.crldev.elrondspringbootstarterreactive.domain.transaction;
 
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.TransactionVersion;
 import software.crldev.elrondspringbootstarterreactive.error.exception.InvalidTransactionVersionException;
 import org.junit.jupiter.api.Test;
 
-import static software.crldev.elrondspringbootstarterreactive.config.TransactionConstants.TRANSACTION_VERSION_DEFAULT;
-import static software.crldev.elrondspringbootstarterreactive.config.TransactionConstants.TRANSACTION_VERSION_TX_HASH_SIGN;
+import static software.crldev.elrondspringbootstarterreactive.config.constants.TransactionConstants.TRANSACTION_VERSION_DEFAULT;
+import static software.crldev.elrondspringbootstarterreactive.config.constants.TransactionConstants.TRANSACTION_VERSION_TX_HASH_SIGN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

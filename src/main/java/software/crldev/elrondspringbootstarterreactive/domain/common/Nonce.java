@@ -1,7 +1,8 @@
 package software.crldev.elrondspringbootstarterreactive.domain.common;
 
-import software.crldev.elrondspringbootstarterreactive.error.exception.InvalidNonceException;
 import lombok.Value;
+import software.crldev.elrondspringbootstarterreactive.error.exception.InvalidNonceException;
+import software.crldev.elrondspringbootstarterreactive.util.HexValidator;
 
 /**
  * Value object for Nonce
@@ -38,6 +39,15 @@ public class Nonce {
      */
     public static Nonce zero() {
         return new Nonce(0L);
+    }
+
+    /**
+     * Getter
+     *
+     * @return - hex value of the nonce
+     */
+    public String getHex() {
+        return HexValidator.processNumberHexArgument(Long.toString(value, 16));
     }
 
     @Override

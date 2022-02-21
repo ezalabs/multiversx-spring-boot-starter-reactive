@@ -1,14 +1,11 @@
 package software.crldev.elrondspringbootstarterreactive.domain.transaction;
 
-import software.crldev.elrondspringbootstarterreactive.config.AddressConstants;
+import software.crldev.elrondspringbootstarterreactive.config.constants.AddressConstants;
 import software.crldev.elrondspringbootstarterreactive.config.ErdNetworkConfigSupplier;
-import software.crldev.elrondspringbootstarterreactive.config.TransactionConstants;
+import software.crldev.elrondspringbootstarterreactive.config.constants.TransactionConstants;
 import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
 import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
 import software.crldev.elrondspringbootstarterreactive.domain.common.Nonce;
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.ChainID;
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.Transaction;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
 import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;

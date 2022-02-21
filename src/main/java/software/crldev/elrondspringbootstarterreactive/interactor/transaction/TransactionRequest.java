@@ -23,7 +23,9 @@ public class TransactionRequest {
     Balance value;
     @NonNull
     PayloadData data;
-    GasLimit gasLimit;
+    @NonNull
+    @Builder.Default
+    GasLimit gasLimit = GasLimit.zero();
 
 }
 

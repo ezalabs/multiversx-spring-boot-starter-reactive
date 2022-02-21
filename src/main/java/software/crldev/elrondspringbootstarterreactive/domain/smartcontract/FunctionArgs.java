@@ -1,7 +1,6 @@
 package software.crldev.elrondspringbootstarterreactive.domain.smartcontract;
 
 import lombok.Value;
-import org.apache.logging.log4j.util.Strings;
 import org.bouncycastle.util.encoders.Hex;
 import software.crldev.elrondspringbootstarterreactive.error.ErrorMessage;
 
@@ -28,12 +27,7 @@ public class FunctionArgs {
 
     private FunctionArgs(String... args) {
         verifyArgs(args);
-
-        this.value = Stream.of(args)
-                .map(String::trim)
-                .map(String::getBytes)
-                .map(Hex::toHexString)
-                .collect(Collectors.toList());
+        this.value = List.of(args);
     }
 
     /**
@@ -53,6 +47,28 @@ public class FunctionArgs {
      */
     public static FunctionArgs empty() {
         return new FunctionArgs();
+    }
+
+    /**
+     * Checks if args list is empty
+     *
+     * @return boolean
+     */
+    public boolean isEmpty() {
+        return value.isEmpty();
+    }
+
+    /**
+     * Getter
+     *
+     * @return - list of hex args value
+     */
+    public List<String> getHex() {
+        return value.stream()
+                .map(String::trim)
+                .map(String::getBytes)
+                .map(Hex::toHexString)
+                .collect(Collectors.toList());
     }
 
     private void verifyArgs(String[] args) {
@@ -78,18 +94,12 @@ public class FunctionArgs {
     }
 
     /**
-     * returns a String formed with the args in hex format
-     * joined by "@" delimiter
+     * returns the list of args in String format
      *
-     * @return - args string hex with delimiter @
+     * @return - value string
      */
     @Override
     public String toString() {
-        return value.isEmpty() ?
-                Strings.EMPTY
-                :
-                value.stream()
-                        .map("@"::concat)
-                        .collect(Collectors.joining());
+        return value.toString();
     }
 }

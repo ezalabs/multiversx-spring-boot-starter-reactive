@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
-import static java.util.Objects.nonNull;
 
 @AllArgsConstructor
 public class ErdTransactionInteractorImpl implements ErdTransactionInteractor {
@@ -134,7 +133,7 @@ public class ErdTransactionInteractorImpl implements ErdTransactionInteractor {
         transaction.setPayloadData(request.getData());
         transaction.setIsEstimation(isEstimationRequest);
 
-        if (nonNull(request.getGasLimit()))
+        if (!request.getGasLimit().isZero())
             transaction.setGasLimit(request.getGasLimit());
 
         wallet.sign(transaction);
@@ -144,7 +143,7 @@ public class ErdTransactionInteractorImpl implements ErdTransactionInteractor {
     private Mono<Long> assignNonce(Wallet wallet) {
         return accountInteractor.getNonce(Address
                         .fromHex(wallet.getPublicKeyHex()))
-                .map(AddressNonce::getNonce);
+                .map(AccountNonce::getNonce);
     }
 
 }

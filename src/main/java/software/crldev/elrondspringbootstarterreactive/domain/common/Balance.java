@@ -1,8 +1,9 @@
 package software.crldev.elrondspringbootstarterreactive.domain.common;
 
 import lombok.Value;
-import software.crldev.elrondspringbootstarterreactive.config.CurrencyConstants;
+import software.crldev.elrondspringbootstarterreactive.config.constants.CurrencyConstants;
 import software.crldev.elrondspringbootstarterreactive.error.exception.InvalidBalanceException;
+import software.crldev.elrondspringbootstarterreactive.util.HexValidator;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -46,6 +47,15 @@ public class Balance {
                 .toString();
 
         return new Balance(bigIntUnits);
+    }
+
+    /**
+     * Getter
+     *
+     * @return - hex value of the balance
+     */
+    public String getHex() {
+        return HexValidator.processNumberHexArgument(value.toString(16));
     }
 
     /**

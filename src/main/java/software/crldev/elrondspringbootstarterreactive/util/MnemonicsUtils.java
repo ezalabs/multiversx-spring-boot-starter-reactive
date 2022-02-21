@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static software.crldev.elrondspringbootstarterreactive.config.WalletConstants.*;
+import static software.crldev.elrondspringbootstarterreactive.config.constants.WalletConstants.*;
 
 /**
  * Utility class for mnemonics operations

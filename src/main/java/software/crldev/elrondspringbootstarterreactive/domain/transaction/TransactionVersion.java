@@ -3,8 +3,8 @@ package software.crldev.elrondspringbootstarterreactive.domain.transaction;
 import software.crldev.elrondspringbootstarterreactive.error.exception.InvalidTransactionVersionException;
 import lombok.Value;
 
-import static software.crldev.elrondspringbootstarterreactive.config.TransactionConstants.TRANSACTION_VERSION_DEFAULT;
-import static software.crldev.elrondspringbootstarterreactive.config.TransactionConstants.TRANSACTION_VERSION_TX_HASH_SIGN;
+import static software.crldev.elrondspringbootstarterreactive.config.constants.TransactionConstants.TRANSACTION_VERSION_DEFAULT;
+import static software.crldev.elrondspringbootstarterreactive.config.constants.TransactionConstants.TRANSACTION_VERSION_TX_HASH_SIGN;
 
 /**
  * Value object for TransactionVersion

@@ -94,7 +94,7 @@ public class TransactionOnNetwork implements ApiModelToDomainConvertible<Transac
         transaction.setGasPrice(GasPrice.fromNumber(this.getGasPrice()));
         transaction.setGasLimit(GasLimit.fromNumber(this.getGasLimit()));
         transaction.setHash(Hash.fromString(this.getBlockHash()));
-        transaction.setPayloadData(PayloadData.fromEncoded(this.getData()));
+        transaction.setPayloadData(PayloadData.fromBase64Encoded(this.getData()));
         transaction.applySignature(Signature.fromHex(this.getSignature()));
         transaction.setStatus(TransactionStatus.fromString(this.getStatus()));
         return transaction;

@@ -37,10 +37,9 @@ public class PayloadData {
      * @param encoded - data Base64 encoded String value
      * @return - an instance of PayloadData
      */
-    public static PayloadData fromEncoded(String encoded) {
+    public static PayloadData fromBase64Encoded(String encoded) {
         return isNullOrEmpty(encoded) ? PayloadData.empty() : new PayloadData(Base64.decode(encoded));
     }
-
 
     /**
      * Creates an empty PayloadData

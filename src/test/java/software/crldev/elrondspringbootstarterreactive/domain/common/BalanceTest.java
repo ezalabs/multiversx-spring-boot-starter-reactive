@@ -1,7 +1,6 @@
 package software.crldev.elrondspringbootstarterreactive.domain.common;
 
-import software.crldev.elrondspringbootstarterreactive.config.CurrencyConstants;
-import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
+import software.crldev.elrondspringbootstarterreactive.config.constants.CurrencyConstants;
 import software.crldev.elrondspringbootstarterreactive.error.exception.InvalidBalanceException;
 import org.junit.jupiter.api.Test;
 

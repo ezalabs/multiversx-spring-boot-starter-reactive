@@ -39,9 +39,17 @@ public enum ErrorMessage {
     FUNCTION_ARGS_NULL("Function args is empty or nul.l"),
     FUNCTION_NAME("Function name cannot be null or empty."),
     TOKEN_NAME("Invalid ESDT token name. Length must be between 3 and 20, alphanumeric chars only."),
+    TOKEN_IDENTIFIER("Invalid ESDT token identifier."),
     TOKEN_TICKER("Invalid ESDT token ticker. Length must be between 3 and 10, alphanumeric chars only."),
     TOKEN_DECIMALS("Invalid number of decimals for ESDT token. Numerical value must be even and between 0 and 18."),
-    INITIAL_SUPPLY("Invalid number for initial supply of ESDT token. Numerical value must be even and between 0 and 18.");
+    INITIAL_SUPPLY("Invalid number for initial supply of ESDT token."),
+    TOKEN_PROPERTY("Invalid ESDT token properties. Must be canFreeze, canWipe, canPause, canChangeOwner, canUpgrade, canAddSpecialRoles, canTransferNFTCreateRole."),
+    TOKEN_ROLE("Invalid role. Must be ESDTRoleLocalBurn and / or ESDTRoleLocalMint."),
+    ADDRESS_EMPTY("Target address cannot be empty."),
+    TOKEN_ROYALTIES("Token royalties value must be between 0 and 10000 (0 meaning 0% and 10000 meaning 100%)."),
+    TOKEN_ATTRIBUTES("Token attributes cannot be null or empty. Metadata URI must point to a JSON file."),
+    NFT_MEDIA_URI("Invalid NFT media URI. File format can only be png, jpeg, jpg, gif, acc, flac, m4a, mp3, wav, mov, quicktime, mp4 and webm."),
+    NFT_METADATA_URI("Invalid NFT metadata URI. File format can only be json.");
 
     private final String value;
 

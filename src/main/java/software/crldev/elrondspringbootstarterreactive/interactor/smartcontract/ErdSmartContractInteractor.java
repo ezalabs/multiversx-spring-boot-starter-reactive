@@ -2,8 +2,8 @@ package software.crldev.elrondspringbootstarterreactive.interactor.smartcontract
 
 import reactor.core.publisher.Mono;
 import software.crldev.elrondspringbootstarterreactive.api.model.*;
-import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ScFunction;
-import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ScQuery;
+import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ContractFunction;
+import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ContractQuery;
 import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
 
 /**
@@ -16,44 +16,42 @@ public interface ErdSmartContractInteractor {
     /**
      * Method used to call a smart contract function
      *
-     * @param wallet - transaction caller's Wallet instance
+     * @param wallet   - transaction caller's Wallet instance
      * @param function - smart contract function object
      * @return - TransactionHash API response
      */
-    Mono<TransactionHash> callFunction(Wallet wallet, ScFunction function);
+    Mono<TransactionHash> callFunction(Wallet wallet, ContractFunction function);
 
     /**
      * Method used to query smart contract
      *
+     * @param query - smart contract query function object
      * @return - ScQueryResult API response
      */
-    Mono<ScQueryResult> query(Wallet wallet, ScQuery function);
+    Mono<ContractQueryResult> query(ContractQuery query);
 
     /**
      * Method used to query smart contract for hex value
      *
-     * @param wallet - transaction caller's Wallet instance
-     * @param function - smart contract query function object
+     * @param query - smart contract query function object
      * @return - ScQueryResultHex API response
      */
-    Mono<ScQueryResultHex> queryHex(Wallet wallet, ScQuery function);
+    Mono<ContractQueryResultHex> queryHex(ContractQuery query);
 
     /**
      * Method used to query smart contract for String value
      *
-     * @param wallet - transaction caller's Wallet instance
-     * @param function - smart contract query function object
+     * @param query - smart contract query function object
      * @return - ScQueryResultString API response
      */
-    Mono<ScQueryResultString> queryString(Wallet wallet, ScQuery function);
+    Mono<ContractQueryResultString> queryString(ContractQuery query);
 
     /**
      * Method used to query smart contract for integer value
      *
-     * @param wallet - transaction caller's Wallet instance
-     * @param function - smart contract query function object
+     * @param query - smart contract query function object
      * @return - ScQueryResultInt API response
      */
-    Mono<ScQueryResultInt> queryInt(Wallet wallet, ScQuery function);
+    Mono<ContractQueryResultInt> queryInt(ContractQuery query);
 
 }

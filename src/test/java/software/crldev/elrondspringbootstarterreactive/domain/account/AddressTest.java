@@ -1,7 +1,6 @@
 package software.crldev.elrondspringbootstarterreactive.domain.account;
 
-import software.crldev.elrondspringbootstarterreactive.config.AddressConstants;
-import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
+import software.crldev.elrondspringbootstarterreactive.config.constants.AddressConstants;
 import software.crldev.elrondspringbootstarterreactive.error.exception.CannotDecodeBech32AddressException;
 import software.crldev.elrondspringbootstarterreactive.error.exception.InvalidHexValueException;
 import org.bouncycastle.util.encoders.Hex;

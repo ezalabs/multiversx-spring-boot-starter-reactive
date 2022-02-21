@@ -16,7 +16,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 
-import static software.crldev.elrondspringbootstarterreactive.config.CurrencyConstants.ONE_EGLD_STRING;
+import static software.crldev.elrondspringbootstarterreactive.config.constants.CurrencyConstants.ONE_EGLD_STRING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,7 +65,7 @@ class ErdAccountInteractorTest {
     void getBalance() {
         var balance = new BigInteger(ONE_EGLD_STRING);
 
-        var apiResponse = AddressBalance
+        var apiResponse = AccountBalance
                 .builder().balance(balance).build();
 
         Helper.verifyInteractionOk(
@@ -80,7 +80,7 @@ class ErdAccountInteractorTest {
     void getNonce() {
         var nonce = 10L;
 
-        var apiResponse = AddressNonce
+        var apiResponse = AccountNonce
                 .builder().nonce(nonce).build();
 
         Helper.verifyInteractionOk(
@@ -123,7 +123,7 @@ class ErdAccountInteractorTest {
     void getStorageValue() {
         var storageValue = "btc9032032";
 
-        var apiResponse = AddressStorageValue
+        var apiResponse = AccountStorageValue
                 .builder().value(storageValue).build();
 
         Helper.verifyInteractionOk(

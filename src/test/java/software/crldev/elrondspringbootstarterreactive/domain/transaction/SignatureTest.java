@@ -1,10 +1,9 @@
 package software.crldev.elrondspringbootstarterreactive.domain.transaction;
 
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.Signature;
-import software.crldev.elrondspringbootstarterreactive.error.exception.CannotCreateSignatureException;
-import software.crldev.elrondspringbootstarterreactive.error.exception.SignatureEmptyException;
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
+import software.crldev.elrondspringbootstarterreactive.error.exception.CannotCreateSignatureException;
+import software.crldev.elrondspringbootstarterreactive.error.exception.SignatureEmptyException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

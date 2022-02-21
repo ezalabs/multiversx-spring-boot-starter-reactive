@@ -1,6 +1,8 @@
 package software.crldev.elrondspringbootstarterreactive.domain.smartcontract;
 
 import lombok.Value;
+import org.apache.logging.log4j.util.Strings;
+import org.bouncycastle.util.encoders.Hex;
 import software.crldev.elrondspringbootstarterreactive.error.ErrorMessage;
 
 import static io.netty.util.internal.StringUtil.isNullOrEmpty;
@@ -20,7 +22,7 @@ public class FunctionName {
     }
 
     /**
-     * Creates a FunctionArgs object with empty array of args
+     * Creates a FunctionName object with empty array of args
      *
      * @return - an instance of FunctionName
      */
@@ -29,6 +31,33 @@ public class FunctionName {
             throw new IllegalArgumentException(ErrorMessage.FUNCTION_NAME.getValue());
 
         return new FunctionName(name.replaceAll("\\s+", ""));
+    }
+
+    /**
+     * Creates a FunctionName object with empty array of args
+     *
+     * @return - an instance of FunctionName
+     */
+    public static FunctionName empty() {
+        return new FunctionName(Strings.EMPTY);
+    }
+
+    /**
+     * Checks if function name is empty
+     *
+     * @return boolean
+     */
+    public boolean isEmpty() {
+        return value.isEmpty();
+    }
+
+    /**
+     * Getter
+     *
+     * @return - hex value of the Function Name
+     */
+    public String getHex() {
+        return Hex.toHexString(value.getBytes());
     }
 
     /**

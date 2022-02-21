@@ -9,6 +9,7 @@ import software.crldev.elrondspringbootstarterreactive.api.model.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class WrappedResponses {
 
@@ -129,7 +130,40 @@ public class WrappedResponses {
     public static class ScQueryResponse {
 
         @JsonProperty("data")
-        private final ScQueryResult result;
+        private final ContractQueryResult result;
+
+    }
+
+    @Builder
+    @Getter
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonDeserialize(builder = AccountESDTsResponse.AccountESDTsResponseBuilder.class)
+    public static class AccountESDTsResponse {
+
+        @JsonProperty("esdts")
+        private final Map<String, ESDTToken> result;
+
+    }
+
+    @Builder
+    @Getter
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonDeserialize(builder = GetTokenResponse.GetTokenResponseBuilder.class)
+    public static class GetTokenResponse {
+
+        @JsonProperty("tokens")
+        private final Set<String> result;
+
+    }
+
+    @Builder
+    @Getter
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonDeserialize(builder = NFTDataResponse.NFTDataResponseBuilder.class)
+    public static class NFTDataResponse {
+
+        @JsonProperty("tokenData")
+        private final NFTData result;
 
     }
 

@@ -25,4 +25,16 @@ public class HexValidator {
         }
     }
 
+    /**
+     * Method used for processing hex number arguments for transactions
+     *
+     * @param hex - HEX value in String format
+     * @return - HEX value with even nr of chars
+     */
+    public static String processNumberHexArgument(String hex) {
+        if (!(hex.length() % 2 == 0))
+            return "0" + hex;
+
+        return hex;
+    }
 }

@@ -2,7 +2,6 @@ package software.crldev.elrondspringbootstarterreactive.domain.transaction;
 
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.Test;
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
 
 import java.util.Base64;
 
@@ -23,13 +22,13 @@ class PayloadDataTest {
     void fromEncoded() {
         var emptyEncoded = Strings.EMPTY;
 
-        assertArrayEquals(dataAsBuffer, PayloadData.fromEncoded(encoded).getBuffer());
-        assertTrue(PayloadData.fromEncoded(emptyEncoded).isEmpty());
+        assertArrayEquals(dataAsBuffer, PayloadData.fromBase64Encoded(encoded).getBuffer());
+        assertTrue(PayloadData.fromBase64Encoded(emptyEncoded).isEmpty());
     }
 
     @Test
     void length() {
-        assertEquals(dataString.length(), PayloadData.fromEncoded(encoded).length());
+        assertEquals(dataString.length(), PayloadData.fromBase64Encoded(encoded).length());
     }
 
     @Test

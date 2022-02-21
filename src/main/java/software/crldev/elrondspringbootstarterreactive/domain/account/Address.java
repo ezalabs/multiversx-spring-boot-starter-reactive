@@ -1,13 +1,13 @@
 package software.crldev.elrondspringbootstarterreactive.domain.account;
 
+import org.bitcoinj.core.Bech32;
+import org.bouncycastle.util.encoders.Hex;
 import software.crldev.elrondspringbootstarterreactive.error.exception.CannotDecodeBech32AddressException;
 import software.crldev.elrondspringbootstarterreactive.error.exception.InvalidHexValueException;
 import software.crldev.elrondspringbootstarterreactive.error.exception.WrongNetworkAddressException;
 import software.crldev.elrondspringbootstarterreactive.util.HexValidator;
-import org.bitcoinj.core.Bech32;
-import org.bouncycastle.util.encoders.Hex;
 
-import static software.crldev.elrondspringbootstarterreactive.config.AddressConstants.*;
+import static software.crldev.elrondspringbootstarterreactive.config.constants.AddressConstants.*;
 import static software.crldev.elrondspringbootstarterreactive.util.BitsConverter.convertBits;
 
 /**
@@ -98,6 +98,15 @@ public class Address {
      */
     public static Address zero() {
         return new Address(ZERO_PUBKEY_STRING);
+    }
+
+    /**
+     * Checks if Address is zero
+     *
+     * @return boolean
+     */
+    public boolean isZero() {
+        return hexValue.equals(ZERO_PUBKEY_STRING);
     }
 
 }

@@ -20,7 +20,7 @@ public class GasUtils {
      */
     public static BigInteger computeGasCost(PayloadData data) {
         return ErdNetworkConfigSupplier.config.getMinGasLimit()
-                .add(BigInteger.valueOf(data.toString().length())
+                .add(BigInteger.valueOf(data.length())
                         .multiply(BigInteger.valueOf(ErdNetworkConfigSupplier.config.getGasPerDataByte())));
     }
 

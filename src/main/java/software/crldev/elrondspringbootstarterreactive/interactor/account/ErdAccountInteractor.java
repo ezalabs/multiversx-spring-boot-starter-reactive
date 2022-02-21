@@ -28,7 +28,7 @@ public interface ErdAccountInteractor {
      * @param address - Address input
      * @return - AddressBalance API response
      */
-    Mono<AddressBalance> getBalance(Address address);
+    Mono<AccountBalance> getBalance(Address address);
 
     /**
      * Method used to query the nonce of an Account
@@ -36,7 +36,7 @@ public interface ErdAccountInteractor {
      * @param address - Address input
      * @return - AddressNonce API response
      */
-    Mono<AddressNonce> getNonce(Address address);
+    Mono<AccountNonce> getNonce(Address address);
 
     /**
      * Method used to query the list of transactions for an Account
@@ -53,7 +53,7 @@ public interface ErdAccountInteractor {
      * @param key - String key of the value
      * @return - AddressStorageValue API Response
      */
-    Mono<AddressStorageValue> getStorageValue(Address address, String key);
+    Mono<AccountStorageValue> getStorageValue(Address address, String key);
 
     /**
      * Method used to query all the storage of an Account

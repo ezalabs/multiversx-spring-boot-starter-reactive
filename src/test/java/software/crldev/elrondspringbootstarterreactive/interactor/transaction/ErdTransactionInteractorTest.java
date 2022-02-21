@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static software.crldev.elrondspringbootstarterreactive.config.CurrencyConstants.ONE_EGLD_STRING;
+import static software.crldev.elrondspringbootstarterreactive.config.constants.CurrencyConstants.ONE_EGLD_STRING;
 import static software.crldev.elrondspringbootstarterreactive.interactor.Helper.verifyInteractionException;
 import static software.crldev.elrondspringbootstarterreactive.interactor.Helper.verifyInteractionOk;
 
@@ -335,7 +335,7 @@ class ErdTransactionInteractorTest {
 
     private void mockNonce() {
         when(accountInteractor.getNonce(any(Address.class)))
-                .thenReturn(Mono.just(AddressNonce.builder().nonce(nonceValue).build()));
+                .thenReturn(Mono.just(AccountNonce.builder().nonce(nonceValue).build()));
     }
 
     private TransactionRequest buildRequest(Double value, String data) {

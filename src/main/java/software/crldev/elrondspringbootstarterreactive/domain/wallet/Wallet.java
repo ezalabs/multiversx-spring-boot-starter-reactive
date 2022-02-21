@@ -1,18 +1,19 @@
 package software.crldev.elrondspringbootstarterreactive.domain.wallet;
 
-import org.springframework.http.codec.multipart.FilePart;
-import reactor.core.publisher.Mono;
-import software.crldev.elrondspringbootstarterreactive.config.WalletConstants;
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.Signable;
-import software.crldev.elrondspringbootstarterreactive.domain.transaction.Signature;
-import software.crldev.elrondspringbootstarterreactive.error.exception.CannotCreateSignatureException;
-import software.crldev.elrondspringbootstarterreactive.error.exception.CannotSignTransactionException;
-import software.crldev.elrondspringbootstarterreactive.error.exception.PrivateKeyHexSizeException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Value;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.bouncycastle.util.encoders.Hex;
+import org.springframework.http.codec.multipart.FilePart;
+import reactor.core.publisher.Mono;
+import software.crldev.elrondspringbootstarterreactive.config.constants.WalletConstants;
+import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.Signable;
+import software.crldev.elrondspringbootstarterreactive.domain.transaction.Signature;
+import software.crldev.elrondspringbootstarterreactive.error.exception.CannotCreateSignatureException;
+import software.crldev.elrondspringbootstarterreactive.error.exception.CannotSignTransactionException;
+import software.crldev.elrondspringbootstarterreactive.error.exception.PrivateKeyHexSizeException;
 import software.crldev.elrondspringbootstarterreactive.util.MnemonicsUtils;
 import software.crldev.elrondspringbootstarterreactive.util.PemUtils;
 
@@ -93,6 +94,15 @@ public class Wallet {
             return fromPrivateKeyBuffer(Hex.decode(privateKeyHex));
 
         throw new PrivateKeyHexSizeException(privateKeyHex.length());
+    }
+
+    /**
+     * Getter
+     *
+     * @return - an instance of Address owning the Wallet
+     */
+    public Address getAddress() {
+        return Address.fromHex(getPublicKeyHex());
     }
 
     /**

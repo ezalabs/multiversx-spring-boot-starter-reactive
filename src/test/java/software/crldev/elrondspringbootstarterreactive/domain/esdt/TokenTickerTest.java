@@ -2,6 +2,7 @@ package software.crldev.elrondspringbootstarterreactive.domain.esdt;
 
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
+import software.crldev.elrondspringbootstarterreactive.domain.esdt.common.TokenTicker;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -10,7 +11,6 @@ class TokenTickerTest {
 
     @Test
     void fromString() {
-
         var t1 = TokenTicker.fromString(" UsT ");
 
         assertEquals("UST", t1.getValue());

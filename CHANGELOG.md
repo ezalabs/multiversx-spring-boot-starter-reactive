@@ -49,3 +49,11 @@ Fixed spring.factories for ErdSimpleTransactionSender.
 ## [1.0.6] - 25-Jan-2022
 
 - Fixed custom GasLimit set From ScFunction in the SmartContractInteractor
+
+## [1.1.0] - 21-Feb-2022
+
+- Added the ESDTInteractor interface & implementation
+- Added ESDT API & domain objects
+- Some refactoring in the SmartContractInteractor
+- New method in HexValidator
+- Other improvements

@@ -2,7 +2,7 @@ package software.crldev.elrondspringbootstarterreactive.domain.transaction;
 
 import software.crldev.elrondspringbootstarterreactive.error.exception.NegativeGasException;
 import lombok.Value;
-import software.crldev.elrondspringbootstarterreactive.config.CurrencyConstants;
+import software.crldev.elrondspringbootstarterreactive.config.constants.CurrencyConstants;
 
 import java.math.BigInteger;
 

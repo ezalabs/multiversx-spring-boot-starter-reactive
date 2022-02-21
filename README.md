@@ -34,13 +34,13 @@ To use the starter, add the following dependency to the dependencies section of 
 <dependency>
   <groupId>software.crldev</groupId>
   <artifactId>elrond-spring-boot-starter-reactive</artifactId>
-  <version>1.0.6</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 - Gradle (in your build.gradle file)
 ```
 dependencies {
-  implementation(group: 'software.crldev', name: 'elrond-spring-boot-starter-reactive', version: '1.0.6')
+  implementation(group: 'software.crldev', name: 'elrond-spring-boot-starter-reactive', version: '1.1.0')
 }
 ```
 - And some other required dependencies for cryptographic functions:
@@ -160,11 +160,11 @@ Mono<TransactionHash> sendTransaction(File pemFile) {
 - queryInt
 ```
 
-The Sc Interactor has methods which interact with the smart contracts. 
+This component has methods which interact with the smart contracts on the network (obviously). 
 
-In order to call a smart contract function, we need to pass an instance of ScFunction:
+In order to call a smart contract function, we need to pass an instance of ContractFunction:
 
-**[ScFunction](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/smartcontract/ScFunction.java)**
+**[ContractFunction](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/smartcontract/ContractFunction.java)**
 ```
  - smart contract address
  - function name
@@ -180,7 +180,7 @@ Example usage:
 Mono<TransactionHash> callFunction(File pemFile) {
     var wallet = WalletCreator.fromPemFile(pemFile);
 
-    var function = ScFunction.builder()
+    var function = ContractFunction.builder()
         .smartContractAddress(Address.fromBech32("erd1xxxxxxxxxxxxxxxxxxxx8llllsh6u4jp"))
         .functionName(FunctionName.fromString("addName"))
         .args(FunctionArgs.fromString("elrond"))
@@ -191,11 +191,11 @@ Mono<TransactionHash> callFunction(File pemFile) {
 }
 ```
 
-The ScFunction generates payload based on function name and args (HEX encoded), creates, assigns nonce, gas (if not specified, default is used), signs and executes a transaction.
+The ContractFunction generates a payload based on function name and args (HEX encoded), creates, assigns nonce, gas (if not specified, default is used), signs and executes a transaction.
 
 Also, for querying we can use the following object:
 
-**[ScQuery](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/smartcontract/ScQuery.java)**
+**[ContractQuery](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/smartcontract/ContractQuery.java)**
 ```
  - smart contract address
  - function name
@@ -203,6 +203,66 @@ Also, for querying we can use the following object:
  - value
  - caller address (optional)
 ```
+
+**[ESDT Interactor](src/main/java/software/crldev/elrondspringbootstarterreactive/interactor/esdt/ErdESDTInteractor.java)**
+```
+- processEsdtTransaction
+- getTokensForAccount
+- getTokenRolesForAccount
+- getAllTokens
+- getTokenProperties
+- getTokenSpecialRoles
+- getNftDataForAccount
+- getNftSftForAccount
+- getTokensWithRole
+```
+
+This component has methods which cover all the ESDT related transaction and queries on the network.
+
+```processEsdtTransaction``` takes an ***ESDTTransaction*** arg, which has multiple implementations:
+* **[ESDTIssuance](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/ESDTIssuance.java)** (can be of type FUNGIBLE, SEMI_FUNGIBLE, NON_FUNGIBLE or META)
+* **[ESDTGlobalOp](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/ESDTGlobalOp.java)** (can be of type PAUSE, UNPAUSE, FREEZE, UNFREEZE or WIPE)
+* **[ESDTLocalOp](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/ESDTLocalOp.java)** (can be of type MINT or BURN)
+* **[ESDTTransfer](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/ESDTTransfer.java)**
+* **[ESDTNFTMultiTransfer](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/ESDTNFTMultiTransfer.java)**
+* **[ESDTUpgrade](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/ESDTUpgrade.java)**
+* **[ESDTOwnershipTransfer](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/ESDTOwnershipTransfer.java)**
+* **[ESDTRoleAssignment](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/ESDTRoleAssignment.java)** (can be SET or UNSET)
+* **[NFTCreation](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/NFTCreation.java)**
+* **[NFTAttributesUpdate](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/NFTAttributesUpdate.java)**
+* **[NFTAddURI](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/NFTAddURI.java)**
+* **[NFTCreationRoleTransfer](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/NFTCreationRoleTransfer.java)**
+* **[NFTStopCreation](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/NFTStopCreation.java)**
+* **[NFTSFTLocalOp](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/NFTSFTLocalOp.java)** (can be of type ADD or BURN)
+* **[NFTSFTGlobalOp](src/main/java/software/crldev/elrondspringbootstarterreactive/domain/esdt/NFTSFTGlobalOp.java)** (can be of type FREEZE, UNFREEZE or WIPE)
+
+Example on how to issue a fungible ESDT:
+
+```java
+@Autowired ErdESDTInteractor interactor;
+
+Mono<TransactionHash> issueEsdt(File pemFile) {
+    var wallet = WalletCreator.fromPemFile(pemFile);
+
+    var transaction = ESDTIssuance.builder()
+        .type(Type.FUNGIBLE)
+        .tokenName(TokenName.fromString("Fung Token"))
+        .tokenTicker(TokenTicker.fromString("FNGTNK"))
+        .initialSupply(TokenInitialSupply.fromNumber(BigInteger.TEN))
+        .decimals(TokenDecimals.fromNumber(2))
+        .properties(Set.of(
+                new TokenProperty(TokenPropertyName.CAN_FREEZE, true),
+                new TokenProperty(TokenPropertyName.CAN_CHANGE_OWNER, true),
+                new TokenProperty(TokenPropertyName.CAN_ADD_SPECIAL_ROLES, true)));
+    
+    return interactor.processEsdtTransaction(wallet, transaction);
+}
+```
+
+For all transaction, the gas limit is already configured, but you can always set a custom value.
+
+The rest of the ESDT operations are done in a similar fashion. NFT, SFT and META creation are also made super easy. You can follow the **[Elrond ESDT documentation](https://docs.elrond.com/developers/esdt-tokens/)** where you have the steps for all operations regarding ESDT, which are all covered by this framework.
+
 <br>
 
 For more details regarding the implementation, please consult the project's **[official Javadoc documentation](https://crldev.software/docs/elrond-spring-boot-starter-reactive/)**.
@@ -214,7 +274,8 @@ You can find an example of a spring-boot service using this framework **[HERE](h
 ## Next features
 
 In the next releases the following features have been planned:
-- ESDT Token Interactor
+- Account storage API
+- Maiar Connect integration
 - Wallet Creator - method to instantiate wallet from password-protected JSON keystore file
 - Other enhancements
 
@@ -230,7 +291,7 @@ Contributions are always welcome!
 
 You can get in touch with me using the links below and figure out together how to make the project better.
 
-Also, if you appreciate my effort and want to help me develop & maintain the Elrond Spring SDK, you can buy me some coffee via Maiar. 
+Also, if you appreciate my effort and want to help me develop & maintain the Elrond Spring Boot Framework, you can buy me some coffee via Maiar. 
 
 <img src="https://play-lh.googleusercontent.com/3k3Xj7e87QIwDCwoYbiPEAxuaJDSZKvP0M9HFPHGvi28d1OuT9uzSriXsI2FHQZrsNs" alt="drawing" width="25"/><font size="6"> **@carlo**</font>
 

@@ -15,13 +15,13 @@ import reactor.test.StepVerifier;
 import software.crldev.elrondspringbootstarterreactive.api.ApiResourceURI;
 import software.crldev.elrondspringbootstarterreactive.api.model.*;
 import software.crldev.elrondspringbootstarterreactive.client.ErdProxyClient;
-import software.crldev.elrondspringbootstarterreactive.config.TransactionConstants;
+import software.crldev.elrondspringbootstarterreactive.config.constants.TransactionConstants;
 import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
 import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
 import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionArgs;
 import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionName;
-import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ScFunction;
-import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ScQuery;
+import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ContractFunction;
+import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ContractQuery;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.GasLimit;
 import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
 import software.crldev.elrondspringbootstarterreactive.interactor.WrappedResponses;
@@ -56,7 +56,7 @@ class ErdSmartContractInteractorTest {
     private static final Address scAddress = Address.fromBech32("erd1gklqdv77my5y8n75hszv737gq54q9xk0tmzdh8v5vkfstd64aw7ser9nfr");
     private static final Wallet wallet = Wallet.fromPrivateKeyHex("8442d0bcadbae1b75eff1165f1e3a61f120bddbb440393d8ba3c366342ee4f62");
 
-    ScQuery query = ScQuery.builder()
+    ContractQuery query = ContractQuery.builder()
             .callerAddress(callerAddress)
             .smartContractAddress(scAddress)
             .functionName(FunctionName.fromString("getValue"))
@@ -71,7 +71,7 @@ class ErdSmartContractInteractorTest {
 
     @ParameterizedTest
     @MethodSource("functionRequestDataProvider")
-    void callFunction(final ScFunction functionRequest) {
+    void callFunction(final ContractFunction functionRequest) {
         var hash = "699ae03e6f9a18cb8b1f131b061a46a8b7dd96dfa3fe24861f03aa824a462920";
 
         var requestCaptor = ArgumentCaptor.forClass(TransactionRequest.class);
@@ -84,7 +84,7 @@ class ErdSmartContractInteractorTest {
                     var request = requestCaptor.getValue();
 
                     assertEquals(functionRequest.getSmartContractAddress().getBech32(), request.getReceiverAddress().getBech32());
-                    assertEquals(functionRequest.getValue(), request.getValue());
+                    assertEquals(getExpectedBalance(functionRequest), request.getValue().getValue());
                     assertEquals(getExpectedGasLimit(functionRequest), request.getGasLimit().getValue());
                     assertEquals(functionRequest.getPayloadData(), request.getData());
                     assertEquals(functionRequest.getFunctionName().getValue(), request.getData().toString().split("@")[0]);
@@ -97,7 +97,7 @@ class ErdSmartContractInteractorTest {
     @Test
     void query() {
         var apiResponse = WrappedResponses.ScQueryResponse.builder()
-                .result(ScQueryResult.builder()
+                .result(ContractQueryResult.builder()
                         .code("code")
                         .message("retrieved")
                         .data(List.of("value"))
@@ -107,7 +107,7 @@ class ErdSmartContractInteractorTest {
         verifyInteractionOk(
                 client,
                 apiResponse,
-                () -> interactor.query(wallet, query),
+                () -> interactor.query(query),
                 (r) -> {
                     assertEquals("code", r.getCode());
                     assertEquals("retrieved", r.getMessage());
@@ -119,68 +119,75 @@ class ErdSmartContractInteractorTest {
 
     @Test
     void queryHex() {
-        var apiResponse = ScQueryResultHex.builder().value("hexValue").build();
+        var apiResponse = ContractQueryResultHex.builder().value("hexValue").build();
 
         verifyInteractionOk(
                 client,
                 apiResponse,
-                () -> interactor.queryHex(wallet, query),
+                () -> interactor.queryHex(query),
                 (r) -> {
                     assertEquals(r.getValue(), "hexValue");
 
                     verify(client).post(eq(ApiResourceURI.QUERY_SMART_CONTRACT_HEX.getURI()),
-                            any(), eq(ScQueryResultHex.class));
+                            any(), eq(ContractQueryResultHex.class));
                 }, HttpMethod.POST);
     }
 
     @Test
     void queryString() {
-        var apiResponse = ScQueryResultString.builder().value("stringValue").build();
+        var apiResponse = ContractQueryResultString.builder().value("stringValue").build();
 
         verifyInteractionOk(
                 client,
                 apiResponse,
-                () -> interactor.queryString(wallet, query),
+                () -> interactor.queryString(query),
                 (r) -> {
                     assertEquals(r.getValue(), "stringValue");
 
                     verify(client).post(eq(ApiResourceURI.QUERY_SMART_CONTRACT_STRING.getURI()),
-                            any(), eq(ScQueryResultString.class));
+                            any(), eq(ContractQueryResultString.class));
                 }, HttpMethod.POST);
     }
 
     @Test
     void queryInt() {
-        var apiResponse = ScQueryResultInt.builder().value(BigInteger.TEN).build();
+        var apiResponse = ContractQueryResultInt.builder().value(BigInteger.TEN).build();
 
         verifyInteractionOk(
                 client,
                 apiResponse,
-                () -> interactor.queryInt(wallet, query),
+                () -> interactor.queryInt(query),
                 (r) -> {
                     assertEquals(r.getValue(), BigInteger.TEN);
 
                     verify(client).post(eq(ApiResourceURI.QUERY_SMART_CONTRACT_INT.getURI()),
-                            any(), eq(ScQueryResultInt.class));
+                            any(), eq(ContractQueryResultInt.class));
                 }, HttpMethod.POST);
     }
 
-    private BigInteger getExpectedGasLimit(final ScFunction scFunction) {
-        final var gasLimit = scFunction.getGasLimit();
+    private BigInteger getExpectedGasLimit(final ContractFunction contractFunction) {
+        final var gasLimit = contractFunction.getGasLimit();
         return nonNull(gasLimit) ? gasLimit.getValue() : TransactionConstants.SC_CALL_GAS_LIMIT;
     }
 
+    private BigInteger getExpectedBalance(final ContractFunction contractFunction) {
+        final var balance = contractFunction.getValue();
+        return nonNull(balance) ? balance.getValue() : BigInteger.ZERO;
+    }
+
     private static Stream<Arguments> functionRequestDataProvider() {
-        final var scFunction = ScFunction.builder()
+        final var scFunction = ContractFunction.builder()
                 .smartContractAddress(scAddress)
                 .functionName(FunctionName.fromString("delegate"))
                 .args(FunctionArgs.fromString(scAddress.getBech32()))
-                .value(Balance.zero())
                 .build();
         final var gasLimit = GasLimit.fromNumber(GAS_LIMIT);
         return Stream.of(
                 Arguments.of(scFunction),
-                Arguments.of(scFunction.toBuilder().gasLimit(gasLimit).build())
+                Arguments.of(scFunction.toBuilder()
+                        .gasLimit(gasLimit)
+                        .value(Balance.fromEgld(1.00))
+                        .build())
         );
     }
 }

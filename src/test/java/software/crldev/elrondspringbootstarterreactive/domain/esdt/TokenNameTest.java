@@ -2,6 +2,7 @@ package software.crldev.elrondspringbootstarterreactive.domain.esdt;
 
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
+import software.crldev.elrondspringbootstarterreactive.domain.esdt.common.TokenName;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

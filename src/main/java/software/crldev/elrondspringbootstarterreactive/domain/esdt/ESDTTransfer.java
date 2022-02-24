@@ -6,15 +6,16 @@ import lombok.Value;
 import org.apache.logging.log4j.util.Strings;
 import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
 import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
-import software.crldev.elrondspringbootstarterreactive.domain.esdt.ESDTTransaction;
 import software.crldev.elrondspringbootstarterreactive.domain.esdt.common.TokenIdentifier;
-import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionArgs;
+import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionArg;
 import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionName;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.GasLimit;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
 import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
 import software.crldev.elrondspringbootstarterreactive.interactor.transaction.TransactionRequest;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -40,16 +41,17 @@ public class ESDTTransfer implements ESDTTransaction {
     FunctionName functionName = FunctionName.empty();
     @NonNull
     @Builder.Default
-    FunctionArgs functionArgs = FunctionArgs.empty();
+    List<FunctionArg> args = Collections.emptyList();
     @NonNull
     @Builder.Default
     GasLimit gasLimit = GasLimit.defaultEsdtTransfer();
 
     private PayloadData processPayloadData() {
         var functionCall = functionName.isEmpty() ? Strings.EMPTY
-                : "@" + functionName.getHex() + functionArgs.getHex().stream()
-                .map("@"::concat)
-                .collect(Collectors.joining());
+                : "@" + functionName.getHex() +
+                args.stream()
+                        .map(p -> "@" + p.getHex())
+                        .collect(Collectors.joining());
 
         return PayloadData.fromString(format("%s@%s@%s%s",
                 ESDT_TRANSFER_CALL,

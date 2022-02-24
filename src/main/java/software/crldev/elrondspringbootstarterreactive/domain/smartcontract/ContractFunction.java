@@ -8,6 +8,8 @@ import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.GasLimit;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.PayloadData;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -25,7 +27,7 @@ public class ContractFunction {
     FunctionName functionName;
     @NonNull
     @Builder.Default
-    FunctionArgs args = FunctionArgs.empty();
+    List<FunctionArg> args = Collections.emptyList();
     @NonNull
     @Builder.Default
     Balance value = Balance.zero();
@@ -42,8 +44,8 @@ public class ContractFunction {
     public PayloadData getPayloadData() {
         return PayloadData.fromString(String.format("%s%s",
                 functionName.getValue(),
-                args.getHex().stream()
-                        .map("@"::concat)
+                args.stream()
+                        .map(p -> "@" + p.getHex())
                         .collect(Collectors.joining())));
     }
 }

@@ -12,7 +12,7 @@ import software.crldev.elrondspringbootstarterreactive.domain.esdt.ESDTTransacti
 import software.crldev.elrondspringbootstarterreactive.domain.esdt.common.ESDTSpecialRole;
 import software.crldev.elrondspringbootstarterreactive.domain.esdt.common.TokenIdentifier;
 import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ContractQuery;
-import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionArgs;
+import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionArg;
 import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionName;
 import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
 import software.crldev.elrondspringbootstarterreactive.interactor.WrappedResponses;
@@ -20,6 +20,7 @@ import software.crldev.elrondspringbootstarterreactive.interactor.smartcontract.
 import software.crldev.elrondspringbootstarterreactive.interactor.transaction.ErdTransactionInteractor;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -119,7 +120,7 @@ public class ErdESDTInteractorImpl implements ErdESDTInteractor {
                 .builder()
                 .smartContractAddress(Address.fromBech32(ESDT_ISSUER_BECH32_ADDRESS))
                 .functionName(FunctionName.fromString(scCall))
-                .args(FunctionArgs.fromString(identifier.getValue()))
+                .args(List.of(FunctionArg.fromString(identifier.getValue())))
                 .build());
     }
 }

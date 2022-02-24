@@ -36,7 +36,7 @@ public enum ErrorMessage {
     INVALID_PEM_FILE("Invalid PEM file. Error: %s."),
     MISSING_TRANSACTIONS_REQUESTS("Missing transactions request, could not create sendables."),
     NEGATIVE_GAS("Negative gas: %s."),
-    FUNCTION_ARGS_NULL("Function args is empty or nul.l"),
+    FUNCTION_ARG_NULL("Function args is empty, null or less than 0."),
     FUNCTION_NAME("Function name cannot be null or empty."),
     TOKEN_NAME("Invalid ESDT token name. Length must be between 3 and 20, alphanumeric chars only."),
     TOKEN_IDENTIFIER("Invalid ESDT token identifier."),

@@ -18,10 +18,10 @@ import software.crldev.elrondspringbootstarterreactive.client.ErdProxyClient;
 import software.crldev.elrondspringbootstarterreactive.config.constants.TransactionConstants;
 import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
 import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
-import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionArgs;
-import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionName;
 import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ContractFunction;
 import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.ContractQuery;
+import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionArg;
+import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionName;
 import software.crldev.elrondspringbootstarterreactive.domain.transaction.GasLimit;
 import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
 import software.crldev.elrondspringbootstarterreactive.interactor.WrappedResponses;
@@ -61,7 +61,7 @@ class ErdSmartContractInteractorTest {
             .smartContractAddress(scAddress)
             .functionName(FunctionName.fromString("getValue"))
             .value(Balance.zero())
-            .args(FunctionArgs.fromString("first"))
+            .args(List.of(FunctionArg.fromString("first")))
             .build();
 
     @BeforeEach
@@ -179,7 +179,7 @@ class ErdSmartContractInteractorTest {
         final var scFunction = ContractFunction.builder()
                 .smartContractAddress(scAddress)
                 .functionName(FunctionName.fromString("delegate"))
-                .args(FunctionArgs.fromString(scAddress.getBech32()))
+                .args(List.of(FunctionArg.fromString(scAddress.getBech32())))
                 .build();
         final var gasLimit = GasLimit.fromNumber(GAS_LIMIT);
         return Stream.of(

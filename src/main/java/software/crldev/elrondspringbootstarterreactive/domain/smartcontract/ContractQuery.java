@@ -8,6 +8,10 @@ import lombok.Value;
 import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
 import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Value object for Smart Contract query
  *
@@ -22,7 +26,8 @@ public class ContractQuery {
     @NonNull
     FunctionName functionName;
     @NonNull
-    FunctionArgs args;
+    @Builder.Default
+    List<FunctionArg> args = Collections.emptyList();
     @Builder.Default
     Address callerAddress = Address.zero();
     @Builder.Default
@@ -38,7 +43,7 @@ public class ContractQuery {
         return Sendable.builder()
                 .smartContractAddress(smartContractAddress.getBech32())
                 .functionName(functionName.getValue())
-                .args(args.getHex().toArray(new String[]{}))
+                .args(args.stream().map(FunctionArg::getHex).collect(Collectors.toList()).toArray(String[]::new))
                 .callerAddress(callerAddress.isZero() ? null : callerAddress.getBech32())
                 .value(value.isZero() ? null : value.toString())
                 .build();

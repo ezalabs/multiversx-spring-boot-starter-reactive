@@ -5,11 +5,12 @@ import software.crldev.elrondspringbootstarterreactive.domain.account.Address;
 import software.crldev.elrondspringbootstarterreactive.domain.common.Balance;
 import software.crldev.elrondspringbootstarterreactive.domain.esdt.ESDTTransfer;
 import software.crldev.elrondspringbootstarterreactive.domain.esdt.common.TokenIdentifier;
-import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionArgs;
+import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionArg;
 import software.crldev.elrondspringbootstarterreactive.domain.smartcontract.FunctionName;
 import software.crldev.elrondspringbootstarterreactive.domain.wallet.Wallet;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -39,7 +40,7 @@ class ESDTTransferTest {
     void transferWithFunctionAndArgs() {
         var transferWithFunctionAndArgs = transferBuilder()
                 .functionName(FunctionName.fromString("call"))
-                .functionArgs(FunctionArgs.fromString("baby"))
+                .args(List.of(FunctionArg.fromString("baby")))
                 .build();
         var req3 = transferWithFunctionAndArgs.toTransactionRequest(wallet);
 

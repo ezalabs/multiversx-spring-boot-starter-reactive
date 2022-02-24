@@ -57,3 +57,8 @@ Fixed spring.factories for ErdSimpleTransactionSender.
 - Some refactoring in the SmartContractInteractor
 - New method in HexValidator
 - Other improvements
+
+## [1.1.1] - 24-Feb-2022
+
+- Refactor FunctionArgs
+- Added fromString and fromNumber for the function argument as the hex encoding output is different

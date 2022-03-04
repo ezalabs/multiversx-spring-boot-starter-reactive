@@ -35,7 +35,7 @@ public class FunctionArg {
     public static FunctionArg fromString(String arg) {
         if (isNullOrEmpty(arg))
             throw new IllegalArgumentException(ErrorMessage.FUNCTION_ARG_NULL.getValue());
-        return new FunctionArg(arg.replaceAll("\\s+", ""), null);
+        return new FunctionArg(arg.trim(), null);
     }
 
     /**

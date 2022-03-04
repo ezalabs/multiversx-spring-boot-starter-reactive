@@ -62,3 +62,7 @@ Fixed spring.factories for ErdSimpleTransactionSender.
 
 - Refactor FunctionArgs
 - Added fromString and fromNumber for the function argument as the hex encoding output is different
+
+## [1.1.2] - 04-Mar-2022
+
+- Fixed string value in FunctionArg to only trim the value, not eliminate all whitespaces

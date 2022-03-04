@@ -11,8 +11,8 @@ class FunctionArgTest {
 
     @Test
     void fromString() {
-        assertEquals("argument", FunctionArg.fromString(" argument ").toString());
-        assertEquals("617267756d656e74", FunctionArg.fromString("argument").getHex());
+        assertEquals("argument list", FunctionArg.fromString(" argument list   ").toString());
+        assertEquals("617267756d656e74206c697374", FunctionArg.fromString("argument list ").getHex());
 
         assertThrows(IllegalArgumentException.class, () -> FunctionArg.fromString(""));
         assertThrows(IllegalArgumentException.class, () -> FunctionArg.fromString(null));

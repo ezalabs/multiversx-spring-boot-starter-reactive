@@ -1,5 +1,5 @@
 plugins {
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'io.spring.dependency-management' version '1.1.0'
     id 'java-library'
     id 'jacoco'
     id "io.freefair.lombok" version "6.1.0"
@@ -9,13 +9,14 @@ plugins {
 }
 
 group = 'software.crldev'
-sourceCompatibility = '11'
-setArchivesBaseName('elrond-spring-boot-starter-reactive')
-setVersion('1.1.2')
+sourceCompatibility = '17'
+setArchivesBaseName('multiversx-spring-boot-starter-reactive')
+setVersion('1.2.0')
 
 repositories {
     mavenLocal()
     mavenCentral()
+    gradlePluginPortal()
 }
 
 configurations {
@@ -27,31 +28,31 @@ configurations {
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         if (details.requested.group == 'org.apache.logging.log4j') {
-            details.useVersion '2.17.1'
+            details.useVersion '2.20.0'
         }
     }
 }
 
 dependencies {
 
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.6.2'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '2.6.2'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '3.1.0'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '3.1.0'
 
-    implementation group: 'org.bouncycastle', name: 'bcmail-jdk15on', version: '1.69'
-    implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.69'
-    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.69'
-    implementation group: 'org.bouncycastle', name: 'bcprov-ext-jdk15on', version: '1.69'
-    implementation group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.15.10'
+    implementation group: 'org.bouncycastle', name: 'bcmail-jdk15on', version: '1.70'
+    implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.70'
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.70'
+    implementation group: 'org.bouncycastle', name: 'bcprov-ext-jdk15on', version: '1.70'
+    implementation group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.16.2'
 
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.6.2'
-    testImplementation 'io.projectreactor:reactor-test:3.4.14'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '3.1.0'
+    testImplementation 'io.projectreactor:reactor-test:3.5.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '4.3.1'
 }
 
-def rootPackage = 'software.crldev.elrondspringbootstarterreactive'
+def rootPackage = 'software.crldev.multiversxspringbootstarterreactive'
 
 jacocoTestCoverageVerification {
     violationRules {
@@ -67,14 +68,14 @@ jacocoTestCoverageVerification {
                         rootPackage + '.error.*',
                         rootPackage + '.api.model.*',
                         rootPackage + '.util.MnemonicsUtils.KeyAndChainCode',
-                        rootPackage + '.ErdNetworkAutoConfiguration',
+                        rootPackage + '.MxNetworkAutoConfiguration',
                         rootPackage + '.TransactionSenderServiceAutoconfiguration',
-                        rootPackage + '.ErdClientAutoConfiguration',
-                        rootPackage + '.ErdInteractorAutoConfiguration',
+                        rootPackage + '.MxClientAutoConfiguration',
+                        rootPackage + '.MxInteractorAutoConfiguration',
                         rootPackage + '.interactor.WrappedResponses',
                         rootPackage + '.config.constants.*',
-                        rootPackage + '.config.ErdClientConfig',
-                        rootPackage + '.config.ErdNetworkConfigSupplier',
+                        rootPackage + '.config.MxClientConfig',
+                        rootPackage + '.config.MxNetworkConfigSupplier',
                 ]
             }
         }
@@ -117,8 +118,8 @@ publishing {
             artifact sourcesJar
 
             pom {
-                name.set('Elrond Spring Boot Starter Reactive')
-                description.set('A SpringBoot Starter solution designed to ensure easy and efficient integration with the Elrond Network using a Reactive API layer.')
+                name.set('MultiversX Spring Boot Starter Reactive')
+                description.set('A SpringBoot Starter solution designed to ensure easy and efficient integration with the MultiversX Network using a Reactive API layer.')
                 url.set('https://github.com/crldev-software/elrond-spring-boot-starter-reactive')
                 licenses {
                     license {

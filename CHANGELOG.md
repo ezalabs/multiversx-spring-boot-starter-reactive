@@ -3,6 +3,7 @@
 ## [1.0.0] - 04-Oct-2021
 
 First version, containing:
+
 - API request & response models
 - Reactive ErdProxyClient
 - Custom JSON Mapper for API responses
@@ -66,3 +67,9 @@ Fixed spring.factories for ErdSimpleTransactionSender.
 ## [1.1.2] - 04-Mar-2022
 
 - Fixed string value in FunctionArg to only trim the value, not eliminate all whitespaces
+
+## [1.2.0] - 30-May-2023
+
+- upgraded to Java 17 and Spring Boot 3
+- refactored framework to match the rebranding into MultiversX
+- added option to use a custom proxy URL

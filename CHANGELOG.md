@@ -73,3 +73,7 @@ Fixed spring.factories for ErdSimpleTransactionSender.
 - upgraded to Java 17 and Spring Boot 3
 - refactored framework to match the rebranding into MultiversX
 - added option to use a custom proxy URL
+
+## [1.2.1] - 04-Oct-2023
+
+- changed the project domain

@@ -7,17 +7,15 @@ implementation, allowing **fully non-blocking operations** and providing **effic
 management** when interacting with the network, ideal for building **scalable reactive
 microservices**.
 
-[![Build Status](https://app.travis-ci.com/crldev-software/elrond-spring-boot-starter-reactive.svg?branch=main)](https://app.travis-ci.com/crldev-software/elrond-spring-boot-starter-reactive)
 
-[![java](https://img.shields.io/badge/Java11-07405E?style=for-the-badge&logo=java&logoColor=white)](https://openjdk.java.net/projects/jdk/11)
-[![spring](https://img.shields.io/badge/SpringBoot2.0-217346?style=for-the-badge&logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
+[![java](https://img.shields.io/badge/Java17-07405E?style=for-the-badge&logo=java&logoColor=white)](https://openjdk.java.net/projects/jdk/11)
+[![spring](https://img.shields.io/badge/SpringBoot3.0-217346?style=for-the-badge&logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
 [![reactor](https://img.shields.io/badge/reactor-navy?style=for-the-badge&logo=s&logoColor=white)](https://projectreactor.io/)
 
 ## Author
 
 [@carlo-stanciu](https://www.github.com/carlo-stanciu)
 
-[![](https://crldev.software/img/readme-banner.png)](#)
 
 ## Features
 
@@ -36,9 +34,9 @@ descriptor:
 
 ```
 <dependency>
-  <groupId>software.crldev</groupId>
+  <groupId>io.ezalabs</groupId>
   <artifactId>multiversx-spring-boot-starter-reactive</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
 </dependency>
 ```
 
@@ -46,7 +44,7 @@ descriptor:
 
 ```
 dependencies {
-  implementation(group: 'software.crldev', name: 'multiversx-spring-boot-starter-reactive', version: '1.2.0')
+  implementation(group: 'io.ezalabs', name: 'multiversx-spring-boot-starter-reactive', version: '1.2.1')
 }
 ```
 
@@ -78,7 +76,7 @@ spring:
 The project uses object notations from the **blockchain terminology** like **Address, Wallet,
 Transaction, Nonce, Gas, Signature** etc ... so it's required to be familiar with them.
 
-An **[Address](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/account/Address.java)**
+An **[Address](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/account/Address.java)**
 can be instantiated in two ways:
 
 ```
@@ -86,7 +84,7 @@ can be instantiated in two ways:
 - fromBech32 (address in Bech32 String)
 ```
 
-A **[Wallet](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/wallet/Wallet.java)**
+A **[Wallet](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/wallet/Wallet.java)**
 is used for **signing transactions**. It can be instantiated in multiple ways:
 
 ```
@@ -98,14 +96,14 @@ is used for **signing transactions**. It can be instantiated in multiple ways:
 ```
 
 We can generate a mnemonic phrase by
-using **[MnemonicsUtils](src/main/java/software/crldev/multiversxspringbootstarterreactive/util/MnemonicsUtils.java)**
+using **[MnemonicsUtils](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/util/MnemonicsUtils.java)**
 .
 
 The interaction with the MultiversX Network is done with the help of a set components called **
 Interactors**, which provide all the required functionalities based on segregated parts of the
 network:
 
-**[Account Interactor](src/main/java/software/crldev/multiversxspringbootstarterreactive/interactor/account/MxAccountInteractor.java)**
+**[Account Interactor](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/interactor/account/MxAccountInteractor.java)**
 
 ```
 - getAccountInfo
@@ -116,7 +114,7 @@ network:
 - getStorage
 ```
 
-**[Block Interactor](src/main/java/software/crldev/multiversxspringbootstarterreactive/interactor/block/MxBlockInteractor.java)**
+**[Block Interactor](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/interactor/block/MxBlockInteractor.java)**
 
 ```
 - queryHyperblockByNonce
@@ -125,7 +123,7 @@ network:
 - queryShardBlockByHashFromShard
 ```
 
-**[Network Interactor](src/main/java/software/crldev/multiversxspringbootstarterreactive/interactor/network/MxNetworkInteractor.java)**
+**[Network Interactor](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/interactor/network/MxNetworkInteractor.java)**
 
 ```
 - getNetworkConfig
@@ -133,7 +131,7 @@ network:
 - getNodeHeartbeatStatus
 ```
 
-**[Transaction Interactor](src/main/java/software/crldev/multiversxspringbootstarterreactive/interactor/transaction/MxTransactionInteractor.java)**
+**[Transaction Interactor](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/interactor/transaction/MxTransactionInteractor.java)**
 
 ```
 - sendTransaction
@@ -146,7 +144,7 @@ network:
 
 The Transaction Interactor has methods used for a more granular approach to transaction operations.\
 In order to create a sendable transaction, we must first create an instance of a transaction
-using **[Transaction](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/transaction/Transaction.java)**
+using **[Transaction](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/transaction/Transaction.java)**
 domain object (setting **nonce, gasLimit, version** etc), then sign it using a wallet and transform
 it to a payload for the Transaction Interactor (using **toSendable()** method).
 
@@ -155,10 +153,10 @@ for **sending, simulating and estimating.**
 The methods are abstracting the complexity of transaction creation: automatically assigns proper
 nonce value, computes fee based on data input and applies the signature before execution. The
 required inputs are
-a **[Wallet](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/wallet/Wallet.java)**
+a **[Wallet](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/wallet/Wallet.java)**
 and the following payload with minimum necessary data:
 
-**[TransactionRequest](src/main/java/software/crldev/multiversxspringbootstarterreactive/interactor/transaction/TransactionRequest.java)**
+**[TransactionRequest](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/interactor/transaction/TransactionRequest.java)**
 
 ```
  - receiver address
@@ -185,7 +183,7 @@ Example usage:
     }
 ```
 
-**[Smart Contract Interactor](src/main/java/software/crldev/multiversxspringbootstarterreactive/interactor/smartcontract/MxSmartContractInteractor.java)**
+**[Smart Contract Interactor](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/interactor/smartcontract/MxSmartContractInteractor.java)**
 
 ```
 - callFunction
@@ -199,7 +197,7 @@ This component has methods which interact with the smart contracts on the networ
 
 In order to call a smart contract function, we need to pass an instance of ContractFunction:
 
-**[ContractFunction](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/smartcontract/ContractFunction.java)**
+**[ContractFunction](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/smartcontract/ContractFunction.java)**
 
 ```
  - smart contract address
@@ -233,7 +231,7 @@ assigns nonce, gas (if not specified, default is used), signs and executes a tra
 
 Also, for querying we can use the following object:
 
-**[ContractQuery](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/smartcontract/ContractQuery.java)**
+**[ContractQuery](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/smartcontract/ContractQuery.java)**
 
 ```
  - smart contract address
@@ -243,7 +241,7 @@ Also, for querying we can use the following object:
  - caller address (optional)
 ```
 
-**[ESDT Interactor](src/main/java/software/crldev/multiversxspringbootstarterreactive/interactor/esdt/MxESDTInteractor.java)**
+**[ESDT Interactor](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/interactor/esdt/MxESDTInteractor.java)**
 
 ```
 - processEsdtTransaction
@@ -261,26 +259,26 @@ This component has methods which cover all the ESDT related transaction and quer
 
 ```processEsdtTransaction``` takes an ***ESDTTransaction*** arg, which has multiple implementations:
 
-* **[ESDTIssuance](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/ESDTIssuance.java)** (
+* **[ESDTIssuance](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/ESDTIssuance.java)** (
   can be of type FUNGIBLE, SEMI_FUNGIBLE, NON_FUNGIBLE or META)
-* **[ESDTGlobalOp](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/ESDTGlobalOp.java)** (
+* **[ESDTGlobalOp](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/ESDTGlobalOp.java)** (
   can be of type PAUSE, UNPAUSE, FREEZE, UNFREEZE or WIPE)
-* **[ESDTLocalOp](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/ESDTLocalOp.java)** (
+* **[ESDTLocalOp](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/ESDTLocalOp.java)** (
   can be of type MINT or BURN)
-* **[ESDTTransfer](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/ESDTTransfer.java)**
-* **[ESDTNFTMultiTransfer](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/ESDTNFTMultiTransfer.java)**
-* **[ESDTUpgrade](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/ESDTUpgrade.java)**
-* **[ESDTOwnershipTransfer](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/ESDTOwnershipTransfer.java)**
-* **[ESDTRoleAssignment](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/ESDTRoleAssignment.java)** (
+* **[ESDTTransfer](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/ESDTTransfer.java)**
+* **[ESDTNFTMultiTransfer](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/ESDTNFTMultiTransfer.java)**
+* **[ESDTUpgrade](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/ESDTUpgrade.java)**
+* **[ESDTOwnershipTransfer](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/ESDTOwnershipTransfer.java)**
+* **[ESDTRoleAssignment](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/ESDTRoleAssignment.java)** (
   can be SET or UNSET)
-* **[NFTCreation](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/NFTCreation.java)**
-* **[NFTAttributesUpdate](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/NFTAttributesUpdate.java)**
-* **[NFTAddURI](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/NFTAddURI.java)**
-* **[NFTCreationRoleTransfer](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/NFTCreationRoleTransfer.java)**
-* **[NFTStopCreation](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/NFTStopCreation.java)**
-* **[NFTSFTLocalOp](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/NFTSFTLocalOp.java)** (
+* **[NFTCreation](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/NFTCreation.java)**
+* **[NFTAttributesUpdate](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/NFTAttributesUpdate.java)**
+* **[NFTAddURI](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/NFTAddURI.java)**
+* **[NFTCreationRoleTransfer](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/NFTCreationRoleTransfer.java)**
+* **[NFTStopCreation](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/NFTStopCreation.java)**
+* **[NFTSFTLocalOp](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/NFTSFTLocalOp.java)** (
   can be of type ADD or BURN)
-* **[NFTSFTGlobalOp](src/main/java/software/crldev/multiversxspringbootstarterreactive/domain/esdt/NFTSFTGlobalOp.java)** (
+* **[NFTSFTGlobalOp](src/main/java/io/ezalabs/multiversxspringbootstarterreactive/domain/esdt/NFTSFTGlobalOp.java)** (
   can be of type FREEZE, UNFREEZE or WIPE)
 
 Example on how to issue a fungible ESDT:
@@ -315,14 +313,10 @@ have the steps for all operations regarding ESDT, which are all covered by this 
 
 <br>
 
-For more details regarding the implementation, please consult the
-project's **[official Javadoc documentation](https://crldev.software/docs/elrond-spring-boot-starter-reactive/)**
-.
-
 ## Demo
 
 You can find an example of a spring-boot service using this
-framework **[HERE](https://github.com/crldev-software/multiversx-spring-boot-demo)**.
+framework **[HERE](https://github.com/ezalabs/multiversx-spring-boot-demo)**.
 
 ## Next features
 
@@ -349,7 +343,7 @@ Framework, you can buy me some coffee via xPortal.
 
 ## 🔗 Links
 
-[![portfolio](https://img.shields.io/badge/crldev.software-red?style=for-the-badge&logo=noi&logoColor=white)](https://crldev.software)
+[![portfolio](https://img.shields.io/badge/ezalabs-purple?style=for-the-badge&logo=noi&logoColor=white)](https://ezalabs.io)
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/carlo-cristian-stanciu)
 [![twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/carlo_stanciu)
 

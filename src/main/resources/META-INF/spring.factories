@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-software.crldev.multiversxspringbootstarterreactive.MxClientAutoConfiguration,\
-software.crldev.multiversxspringbootstarterreactive.config.MxNetworkConfigSupplier,\
-software.crldev.multiversxspringbootstarterreactive.MxInteractorAutoConfiguration
+io.ezalabs.multiversxspringbootstarterreactive.MxClientAutoConfiguration,\
+io.ezalabs.multiversxspringbootstarterreactive.config.MxNetworkConfigSupplier,\
+io.ezalabs.multiversxspringbootstarterreactive.MxInteractorAutoConfiguration

@@ -8,10 +8,10 @@ plugins {
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
-group = 'software.crldev'
+group = 'io.ezalabs'
 sourceCompatibility = '17'
 setArchivesBaseName('multiversx-spring-boot-starter-reactive')
-setVersion('1.2.0')
+setVersion('1.2.1')
 
 repositories {
     mavenLocal()
@@ -35,7 +35,7 @@ configurations.all {
 
 dependencies {
 
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '3.1.0'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '3.1.4'
     implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '3.1.0'
 
     implementation group: 'org.bouncycastle', name: 'bcmail-jdk15on', version: '1.70'
@@ -52,7 +52,7 @@ dependencies {
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '4.3.1'
 }
 
-def rootPackage = 'software.crldev.multiversxspringbootstarterreactive'
+def rootPackage = 'io.ezalabs.multiversxspringbootstarterreactive'
 
 jacocoTestCoverageVerification {
     violationRules {
@@ -99,12 +99,12 @@ jacocoTestReport {
     dependsOn test
 }
 
-task javadocJar(type: Jar) {
+tasks.register('javadocJar', Jar) {
     classifier('javadoc')
     from javadoc.destinationDir
 }
 
-task sourcesJar(type: Jar) {
+tasks.register('sourcesJar', Jar) {
     classifier('sources')
     from sourceSets.main.delombokTask
 }
@@ -120,31 +120,31 @@ publishing {
             pom {
                 name.set('MultiversX Spring Boot Starter Reactive')
                 description.set('A SpringBoot Starter solution designed to ensure easy and efficient integration with the MultiversX Network using a Reactive API layer.')
-                url.set('https://github.com/crldev-software/elrond-spring-boot-starter-reactive')
+                url.set('https://github.com/ezalabs/multiversx-spring-boot-starter-reactive')
                 licenses {
                     license {
                         name.set("MIT")
-                        url.set("https://github.com/crldev-software/elrond-spring-boot-starter-reactive/blob/main/LICENSE")
+                        url.set("https://github.com/ezalabs/multiversx-spring-boot-starter-reactive/blob/main/LICENSE")
                     }
                 }
                 developers {
                     developer {
                         id.set('carlo_stanciu')
-                        name.set('Carlo Stanciu @ crldev.software')
-                        email.set('carlo@crldev.software')
+                        name.set('Carlo Stanciu @ ezalabs.io')
+                        email.set('carlo@ezalabs.io')
                     }
                 }
                 scm {
-                    connection.set('scm:git:git://github.com/crldev-software/elrond-spring-boot-starter-reactive.git')
-                    developerConnection.set('scm:git:git://github.com/crldev-software/elrond-spring-boot-starter-reactive.git')
-                    url.set('https://github.com/crldev-software/elrond-spring-boot-starter-reactive')
+                    connection.set('scm:git:git://github.com/ezalabs/multiversx-spring-boot-starter-reactive.git')
+                    developerConnection.set('scm:git:git://github.com/ezalabs/multiversx-spring-boot-starter-reactive.git')
+                    url.set('https://github.com/ezalabs/multiversx-spring-boot-starter-reactive')
                 }
             }
         }
     }
 }
 
-def decodeBase64 = { String value -> new String(Base64.getDecoder().decode(value)) }
+def decodeBase64 = { String value -> new String(Base64.getDecoder().decode(value == null ? "" : value)) }
 
 nexusPublishing {
     repositories {
